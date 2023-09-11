@@ -13,7 +13,7 @@
  * @package           Klaviyo_Integration
  *
  * @wordpress-plugin
- * Plugin Name:  Klaviyo Integration
+ * Plugin Name:  Awesome CF7 Klaviyo Integration
  * Plugin URI:   https://www.pcsoftnepal.com
  * Description:  Awesome CF7 Klaviyo Integration Plugin.
  * Version:      1.0

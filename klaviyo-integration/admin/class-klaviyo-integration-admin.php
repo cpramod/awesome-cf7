@@ -104,7 +104,7 @@ class Klaviyo_Integration_Admin {
 		//add_menu_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', string $icon_url = '', int $position = null )
 		add_menu_page(
 		  $this->plugin_name,
-		  'Your plugin name',
+		  'Awesome CF7 Klaviyo Integration',
 		  'administrator',
 		  $this->plugin_name,
 		  array(
@@ -117,7 +117,7 @@ class Klaviyo_Integration_Admin {
 		//add_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', int $position = null )
 		add_submenu_page(
 			$this->plugin_name,
-			'Your plugin Settings',
+			'Awesome CF7 Klaviyo Integration Settings',
 			'Settings',
 			'administrator',
 			$this->plugin_name.'-settings',
