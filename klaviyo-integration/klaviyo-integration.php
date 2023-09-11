@@ -10,10 +10,10 @@
  *
  * @link              http://example.com
  * @since             1.0.0
- * @package           Plugin_Name
+ * @package           Klaviyo_Integration
  *
  * @wordpress-plugin
- * Plugin Name:  Awesome CF7 Klaviyo Integration Plugin
+ * Plugin Name:  Klaviyo Integration
  * Plugin URI:   https://www.pcsoftnepal.com
  * Description:  Awesome CF7 Klaviyo Integration Plugin.
  * Version:      1.0
@@ -22,7 +22,7 @@
  * License:      GPL2
  * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:  klaviyo-integration
- * Domain Path:  /awesom-cf7-plugin
+ * Domain Path:  /awesome-cf7-plugin
  */
 
 // If this file is called directly, abort.
@@ -39,30 +39,30 @@ define( 'PLUGIN_NAME_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-plugin-name-activator.php
+ * This action is documented in includes/class-klaviyo-integration-activator.php
  */
-function activate_plugin_name() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-plugin-name-activator.php';
-	Plugin_Name_Activator::activate();
+function activate_klaviyo_integration() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-klaviyo-integration-activator.php';
+	Klaviyo_Integration_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-plugin-name-deactivator.php
+ * This action is documented in includes/class-klaviyo-integration-deactivator.php
  */
-function deactivate_plugin_name() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-plugin-name-deactivator.php';
-	Plugin_Name_Deactivator::deactivate();
+function deactivate_klaviyo_integration() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-klaviyo-integration-deactivator.php';
+	Klaviyo_Integration_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_plugin_name' );
-register_deactivation_hook( __FILE__, 'deactivate_plugin_name' );
+register_activation_hook( __FILE__, 'activate_klaviyo_integration' );
+register_deactivation_hook( __FILE__, 'deactivate_klaviyo_integration' );
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-plugin-name.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-klaviyo-integration.php';
 
 /**
  * Begins execution of the plugin.
@@ -75,7 +75,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-plugin-name.php';
  */
 function run_plugin_name() {
 
-	$plugin = new Plugin_Name();
+	$plugin = new Klaviyo_Integration();
 	$plugin->run();
 
 }
@@ -84,18 +84,28 @@ run_plugin_name();
 // ------------------------------
 function wpb_follow_us($content) {
  
-// Only do this when a single post is displayed
-if ( is_single() ) { 
- 
-// Message you want to display after the post
-// Add URLs to your own Twitter and Facebook profiles
- 
-$content .= '<p style="color:purple; font-size:22px;">If you liked this article, then please follow us on <a href="www.pcsoftnepal.com" title="WPBeginner on Twitter" target="_blank" rel="nofollow">Pcsoftnepal</a></p>';
- 
-}
-// Return the content
-return $content; 
- 
-}
-// Hook our function to WordPress the_content filter
-add_filter('the_content', 'wpb_follow_us'); 
+	// Only do this when a single post is displayed
+	if ( is_single() ) { 
+	 
+	// Message you want to display after the post
+	// Add URLs to your own Twitter and Facebook profiles
+	 
+	$content .= '<p style="color:purple; font-size:22px;">If you liked this article, then please follow us on <a href="www.pcsoftnepal.com" title="WPBeginner on pcsoft" target="_blank" rel="nofollow">Pcsoftnepal</a>.</p>';
+	 
+	}
+	// Return the content
+	return $content; 
+	 
+	}
+	// Hook our function to WordPress the_content filter
+	add_filter('the_content', 'wpb_follow_us'); 
+	
+
+	/**
+	 * Add menus to the WordPress admin.
+	 */
+
+	function my_prefix_add_admin_menus() {
+		// Register admin code here.
+	}
+	add_action( 'admin_menu', 'my_prefix_add_admin_menus' );
