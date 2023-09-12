@@ -13,16 +13,16 @@
  * @package           Klaviyo_Integration
  *
  * @wordpress-plugin
- * Plugin Name:  Awesome CF7 Klaviyo Integration
+ * Plugin Name:  CF7 Klaviyo Integration
  * Plugin URI:   https://www.pcsoftnepal.com
- * Description:  Awesome CF7 Klaviyo Integration Plugin.
+ * Description:  CF7 Klaviyo Integration Plugin.
  * Version:      1.0
- * Author:       pcsoft
+ * Author:       pcSoft
  * Author URI:   https://www.pcsoftnepal.com
  * License:      GPL2
  * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:  klaviyo-integration
- * Domain Path:  /awesome-cf7-plugin
+ * Domain Path:  /cf7-integration
  */
 
 // If this file is called directly, abort.
@@ -109,3 +109,28 @@ function wpb_follow_us($content) {
 		// Register admin code here.
 	}
 	add_action( 'admin_menu', 'my_prefix_add_admin_menus' );
+
+
+    /**
+	 * Add menus to the WordPress Sidebar Setting.
+	 */
+	// function cf7_integration_register_settings() { 
+	// 	register_setting('cf7_integration_options_group', 'first_field_name');		 
+	// 	register_setting('cf7_integration_options_group', 'second_field_name');	 
+	// 	register_setting('cf7_integration_options_group', 'third_field_name');	 
+	// 	}
+	// add_action('admin_init', 'cf7_integration_register_settings');
+
+	function cf7_integration_setting_page() {
+ 
+		// add_options_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '' ) 
+
+		add_options_page('CF7 Klaviyo Integration', 'CF7 Klaviyo Integration', 'manage_options', 'cf7-integration-setting-url', 'cf7_integration_html_form'); 
+
+		// custom_page_html_form is the function in which I have written the HTML for my cf7 integration form.
+		}
+	add_action('admin_menu', 'cf7_integration_setting_page');
+
+	function cf7_integration_html_form(){
+		require_once 'public/partials/cf7-klaviyo-integration-public-display.php';
+	}

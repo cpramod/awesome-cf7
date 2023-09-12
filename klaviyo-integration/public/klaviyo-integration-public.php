@@ -73,7 +73,11 @@ class Klaviyo_Integration_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/klaviyo-integration-public.css', array(), $this->version, 'all' );
+		echo "enqueue styles()   >>  this echo is in :: klaviyo-integration/public/klaviyo-integration-public.php";
+
+		$z = wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/klaviyo-integration-public.css', array(), $this->version, 'all' );
+		var_dump($z);
+		exit();
 
 	}
 
@@ -99,5 +103,6 @@ class Klaviyo_Integration_Public {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/klaviyo-integration-public.js', array( 'jquery' ), $this->version, false );
 
 	}
+
 
 }
