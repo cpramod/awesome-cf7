@@ -72,7 +72,7 @@ class Klaviyo_Integration {
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->Klaviyo_Integration = 'plugin-name';
+		$this->plugin_name = 'cf7-klaviyo-integration';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -120,8 +120,8 @@ class Klaviyo_Integration {
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		// require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-klaviyo-integration-public.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/klaviyo-integration-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-klaviyo-integration-public.php';
+		// require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/klaviyo-integration-public.php';
 
 		$this->loader = new Klaviyo_Integration_Loader();
 
@@ -157,6 +157,12 @@ class Klaviyo_Integration {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+
+		// ***** custom added ***** //
+		$this->loader->add_action('admin_menu', $plugin_admin, 'settings_menu');
+		$this->loader->add_filter('wpcf7_editor_panels', $plugin_admin,'add_cf7_panel');
+		$this->loader->add_action('save_post', $plugin_admin,'save_a_cf7_custom_fields');
+		//$this->loader->add_action('save_post', $plugin_admin, array($this,'save_a_cf7_custom_fields'));
 
 	}
 

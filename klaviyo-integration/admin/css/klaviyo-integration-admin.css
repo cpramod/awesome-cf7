@@ -2,3 +2,20 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+ .cf7_integ_container{
+    text-transform: capitalize;
+    margin: 20px 20px 0 0;
+    padding: 15px;
+    background: #e3e3e3;
+}
+ .cf7_integ_container h1{
+    color:#024002;
+ }
+
+ .api_input_box{
+   margin-top: 10px;
+   flex-direction: column;
+   display: flex;
+
+ }

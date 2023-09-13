@@ -30,6 +30,7 @@ class Klaviyo_Integration_Public {
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
 	private $plugin_name;
+	// private $plugin_name =  "cf7-klaviyo-integration";
 
 	/**
 	 * The version of this plugin.
@@ -73,11 +74,10 @@ class Klaviyo_Integration_Public {
 		 * class.
 		 */
 
-		echo "enqueue styles()   >>  this echo is in :: klaviyo-integration/public/klaviyo-integration-public.php";
-
-		$z = wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/klaviyo-integration-public.css', array(), $this->version, 'all' );
-		var_dump($z);
-		exit();
+		// echo "enqueue styles()   >   klaviyo-integration/public/css";		
+		// $z = wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/klaviyo-integration-public.css', array(), $this->version, 'all' );
+		// var_dump($this->plugin_name);
+		// exit();
 
 	}
 

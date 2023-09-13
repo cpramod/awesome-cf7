@@ -81,56 +81,5 @@ function run_plugin_name() {
 }
 run_plugin_name();
 
-// ------------------------------
-function wpb_follow_us($content) {
- 
-	// Only do this when a single post is displayed
-	if ( is_single() ) { 
-	 
-	// Message you want to display after the post
-	// Add URLs to your own Twitter and Facebook profiles
-	 
-	$content .= '<p style="color:purple; font-size:22px;">If you liked this article, then please follow us on <a href="www.pcsoftnepal.com" title="WPBeginner on pcsoft" target="_blank" rel="nofollow">Pcsoftnepal</a>.</p>';
-	 
-	}
-	// Return the content
-	return $content; 
-	 
-	}
-	// Hook our function to WordPress the_content filter
-	add_filter('the_content', 'wpb_follow_us'); 
-	
-
-	/**
-	 * Add menus to the WordPress admin.
-	 */
-
-	function my_prefix_add_admin_menus() {
-		// Register admin code here.
-	}
-	add_action( 'admin_menu', 'my_prefix_add_admin_menus' );
 
 
-    /**
-	 * Add menus to the WordPress Sidebar Setting.
-	 */
-	// function cf7_integration_register_settings() { 
-	// 	register_setting('cf7_integration_options_group', 'first_field_name');		 
-	// 	register_setting('cf7_integration_options_group', 'second_field_name');	 
-	// 	register_setting('cf7_integration_options_group', 'third_field_name');	 
-	// 	}
-	// add_action('admin_init', 'cf7_integration_register_settings');
-
-	function cf7_integration_setting_page() {
- 
-		// add_options_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '' ) 
-
-		add_options_page('CF7 Klaviyo Integration', 'CF7 Klaviyo Integration', 'manage_options', 'cf7-integration-setting-url', 'cf7_integration_html_form'); 
-
-		// custom_page_html_form is the function in which I have written the HTML for my cf7 integration form.
-		}
-	add_action('admin_menu', 'cf7_integration_setting_page');
-
-	function cf7_integration_html_form(){
-		require_once 'public/partials/cf7-klaviyo-integration-public-display.php';
-	}
