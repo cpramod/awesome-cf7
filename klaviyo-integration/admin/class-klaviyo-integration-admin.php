@@ -178,12 +178,14 @@ class Klaviyo_Integration_Admin {
 	*/
 	function wpcf7_custom_fields ($post) {
 		?>
-		<h2><?php echo esc_html( __( 'Settings', 'contact-form-7' ) ); ?></h2>
-		<fieldset>
-			<!-- <legend></legend> -->
-			<input type="checkbox" id="a-cf7-custom-field" name="a-cf7-custom-field" value=""/>
-			<label for="a-cf7-custom-field">Enable Integration</label>
-		</fieldset>
+		<div class="a_cf7_ki">
+			<h2 class="_h2"><?php echo esc_html( __( 'Integration Status:', 'contact-form-7' ) ); ?><span>Disabled</span></h2>
+			<fieldset>
+				<!-- <legend></legend> -->
+				<label for="a-cf7-custom-field">Enable Klaviyo Integration: </label>
+				<input type="checkbox" id="a-cf7-custom-field" name="a-cf7-custom-field" value=""/>
+			</fieldset>
+		</div>
 		<?php
 	}
 		/*

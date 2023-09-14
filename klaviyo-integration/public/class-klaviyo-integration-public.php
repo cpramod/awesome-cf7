@@ -74,10 +74,9 @@ class Klaviyo_Integration_Public {
 		 * class.
 		 */
 
-		// echo "enqueue styles()   >   klaviyo-integration/public/css";		
-		// $z = wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/klaviyo-integration-public.css', array(), $this->version, 'all' );
-		// var_dump($this->plugin_name);
-		// exit();
+				
+	    wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/klaviyo-integration-public.css', array(), $this->version, 'all' );
+
 
 	}
 
@@ -102,6 +101,23 @@ class Klaviyo_Integration_Public {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/klaviyo-integration-public.js', array( 'jquery' ), $this->version, false );
 
+	}
+
+	// ------------------------------
+	function wpb_follow_us($content) {
+	
+		// Only do this when a single post is displayed
+		if ( is_single() ) { 
+		
+		// Message you want to display after the post
+		// Add URLs to your own Twitter and Facebook profiles
+		
+		$content .= '<p style="color:purple; font-size:22px;">If you liked this article, then please follow us on <a href="www.pcsoftnepal.com" title="WPBeginner on pcsoft" target="_blank" rel="nofollow">Pcsoftnepal</a>.</p>';
+		
+		}
+		// Return the content
+		return $content; 
+	
 	}
 
 

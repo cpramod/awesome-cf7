@@ -2,20 +2,67 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
-
- .cf7_integ_container{
-    text-transform: capitalize;
-    margin: 20px 20px 0 0;
-    padding: 15px;
-    background: #e3e3e3;
+#custom-fields .config-error {
+   margin: 0 !important;
 }
- .cf7_integ_container h1{
-    color:#024002;
- }
 
- .api_input_box{
+.cf7_integ_container {
+   text-transform: capitalize;
+   margin: 20px 20px 0 0;
+   padding: 15px;
+   background: #e3e3e3;
+}
+
+.a_cf7_ki label {
+   font-weight: 600;
+}
+
+.cf7_integ_container h1 {
+   color: #024002;
+}
+
+.api_input_box {
    margin-top: 10px;
    flex-direction: column;
    display: flex;
+}
 
- }
+.a_cf7_ki {
+   padding: 20px;
+}
+
+.a_cf7_ki ._h2 {
+   font-weight: 600 !important;
+   margin: 0 0 15px 0 !important;
+}
+
+.a_cf7_ki ._h2 span {
+   margin-left: 5px;
+   color: red;
+   font-weight: 600;
+   text-transform: uppercase;
+}
+.api_input_box div{
+   margin-top: 5px;
+}
+@media (min-width:1024px) {
+   #apiKey {
+      width: 400px;
+   }
+}
+
+.api_input_box ._button {
+   color: #fff;
+   background-color: #337ab7;
+   border-color: #2e6da4;
+   padding: 8px 12px;
+   border-radius: 4px;
+   cursor: pointer;
+   border: none;
+   margin-left: 5px;
+}
+
+.api_input_box ._button:hover {
+   background: #135e96;
+   border-color: #135e96;
+}
