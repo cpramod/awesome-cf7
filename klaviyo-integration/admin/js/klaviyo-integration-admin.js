@@ -39,19 +39,24 @@
     if (input_value[0].defaultValue == "checked" || input_value == "checked") {
       var append_data = `
 			                   <div class="api_input_box">
-							          <label>Enter Your Api Key:</label>
-									  <div><input type="text" id="apiKey" name="apiKey"> <button class="_button">Fetch Klaviyo Lists</button></div>
+							          <div class="api_box">
+										<label>Enter Your Api Key:</label>
+										<div>
+											<input type="text" id="apiKey" name="apiKey"> 
+											<button class="_button">Fetch Klaviyo Lists</button>
+										</div>
+									  </div>
 							   </div>
 			`;
       var found = jQuery(".a_cf7_ki").find(".api_input_box");
       // console.log("found",found.length);
       if (found.length == 0) {
-        $(".a_cf7_ki").append(append_data);
-        $(".a_cf7_ki ._h2 span").css("color", "green").text("Enabled");
+        $(".a_cf7_ki fieldset").append(append_data);
+        $(".a_cf7_ki ._h2 span").css("color", "#1ed41e").text("Enabled");
       } else {
         input_value = $("#a-cf7-custom-field").val();
         $(".a_cf7_ki .api_input_box").remove();
-        $(".a_cf7_ki ._h2 span").css("color", "red").text("Disabled");
+        $(".a_cf7_ki ._h2 span").css("color", "#d10707").text("Disabled");
       }
     } else {
       $(".a_cf7_ki .api_input_box").remove();
@@ -84,11 +89,17 @@
 
   function append_fetched_data(){
 
-		$(".api_input_box ._button").fadeOut();
+		// $(".api_input_box ._button").fadeOut();
+		$(".api_input_box ._button").remove();
+		$(".api_input_box").append(`
+									<div class="select_lists">
+									     <label>Select Klaviyo List</label>
+										 <select class="form-control_ f_list" required=""></select>
+									</div>
+		`);
+
 		$(".a_cf7_ki").append(`
 								 <div id="has_lists">
-								 <select class="form-control f_list" required="">
-								 </select>
 									<fieldset class="map-fields">
 										<h2 class="head_ing">Map Fields:</h2>
 										<div class="form-group add_block">
@@ -158,41 +169,13 @@
 											</div>
 											</div>
 										</div>
-										<br>
-										<br>
-										<div class="card p-2">
-											<div class="form-group form-check" style="margin:15px;">
-											<label class="form-check-label"><input type="checkbox" class="form-check-input add_tag" style="margin: 0px;" name="KLCF_enable_tag" value="1" onchange="KLCF_enable_tags(this);">
-											&nbsp; Enable GDPR </label><!-- <small>(use this tag in form [klaviyo_gdpr])</small>     -->
-											</div>
-											<div class="form-group add_tag_input ">
-											<div class="row">
-												<div class="col-md-12">
-													<div class="col-md-12">
-														<textarea type="input" class="form-control" placeholder="Enter GDPR Terms" name="KLCF_custom_tag"></textarea>
-													</div>
-													<div class="col-md-12">
-														<small>** [klaviyo_gdpr] will be added automatically above the submit button else you
-														can add the tag manually in the form</small>
-													</div>
-												</div>
-											</div>
-											</div>
-										</div>
-										<div class="card p-2">
-											<div class="form-group form-check" style="margin:15px;">
-											<a href="" target="_blank">
-											<img src="" style="width: 100%;">
-											</a>
-											</div>
-										</div>
 								</fieldset>
 								 </div>
 			`);
 
-		$.each(all_klaviyo_list, function(key,val) {             
-			console.log(val.list_name);         
-			$('.f_list').append('<option value="0">'+val.list_name+'</option>');
+		$.each(all_klaviyo_list, function(key,list) {             
+			console.log(list);         
+			$('.select_lists .f_list').append('<option value="0">'+list.list_name+'</option>');
 			});     
   }
 

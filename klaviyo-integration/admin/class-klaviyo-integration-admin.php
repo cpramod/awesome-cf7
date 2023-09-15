@@ -74,6 +74,7 @@ class Klaviyo_Integration_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/klaviyo-integration-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name.'337', plugin_dir_url( __FILE__ ) . 'css/bootstrap_3_3_7.css', array(), $this->version, 'all' );
 
 	}
 
@@ -96,8 +97,9 @@ class Klaviyo_Integration_Admin {
 		 * class.
 		 */
 
-	   // wp_enqueue_script( "jquery", plugin_dir_url( __FILE__ ) . 'js/jquery_3.6.4_.js', array( '_jquery' ), $this->version, false );
+	   // wp_enqueue_script( "jquery", plugin_dir_url( __FILE__ ) . 'js/jquery_3_6_4.js', array( '_jquery' ), $this->version, false );
 		wp_enqueue_script($this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/klaviyo-integration-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script($this->plugin_name.'337', plugin_dir_url( __FILE__ ) . 'js/bootstrap_min_3_3_7.js', array( 'jquery' ), $this->version, false );
 
 	}
 
@@ -182,8 +184,8 @@ class Klaviyo_Integration_Admin {
 			<h2 class="_h2"><?php echo esc_html( __( 'Integration Status:', 'contact-form-7' ) ); ?><span>Disabled</span></h2>
 			<fieldset>
 				<!-- <legend></legend> -->
-				<label for="a-cf7-custom-field">Enable Klaviyo Integration: </label>
-				<input type="checkbox" id="a-cf7-custom-field" name="a-cf7-custom-field" value=""/>
+					<label for="a-cf7-custom-field">Enable Klaviyo Integration: </label>
+					<input type="checkbox" id="a-cf7-custom-field" name="a-cf7-custom-field" value=""/>
 			</fieldset>
 		</div>
 		<?php

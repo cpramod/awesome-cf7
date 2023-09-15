@@ -2,6 +2,7 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+ 
 #custom-fields .config-error {
    margin: 0 !important;
 }
@@ -12,9 +13,30 @@
    padding: 15px;
    background: #e3e3e3;
 }
+#a-cf7-custom-field{
+   height: 17px;
+   width: 17px;
+   margin: 0;
+}
 
+.a_cf7_ki input{
+   margin-top: 3px;;
+}
+.a_cf7_ki input[type=checkbox]:checked::before {
+   margin: -0.3rem 0 0 -0.4rem;
+   height: 22px;
+   width: 22px;
+}
+.a_cf7_ki fieldset{
+   max-width: 840px;
+   border-radius: 5px;
+   box-shadow: 0 0px 15px rgb(0 0 0 / 10%);
+   padding: 15px;
+   background: #fbfbfb;
+}
 .a_cf7_ki label {
    font-weight: 600;
+   margin: 0;
 }
 
 .cf7_integ_container h1 {
@@ -22,8 +44,7 @@
 }
 
 .api_input_box {
-   margin-top: 10px;
-   flex-direction: column;
+   margin-top: 5px;
    display: flex;
 }
 
@@ -38,15 +59,47 @@
 
 .a_cf7_ki ._h2 span {
    margin-left: 5px;
-   color: red;
+   color: #d10707;
    font-weight: 600;
-   text-transform: uppercase;
+   /* text-transform: uppercase; */
 }
-.api_input_box div{
-   margin-top: 5px;
+.select_lists{
+   flex-direction: column;
+   display: flex;
+   justify-content: flex-end;
+   margin-left: 30px;
+}
+.select_lists select.f_list {
+   max-width: 400px;
+   width: 100%;
+}
+#has_lists{
+   max-width: 840px;
+   /* border: 1px solid #d6d6d6; */
+   margin: 20px 0 0 0;
+   background: #fbfbfb;
+   padding: 10px;
+   border-radius: 5px;
+   box-shadow: 0 0px 15px rgb(0 0 0 / 10%);
+}
+.map-fields h2.head_ing {
+   margin: 0 !important;
+   margin: 0 !important;
+    font-weight: 600;
+    width: fit-content;
+    border-bottom: 1px solid #cdc8c882;
+}
+.a_cf7_ki input,
+.a_cf7_ki select{
+   border: 1px solid #cdc8c882;
+   box-shadow: 0 0px 10px rgb(0 0 0 / 5%);
+}
+.a_cf7_ki fieldset.map-fields{
+   box-shadow: none;
 }
 @media (min-width:1024px) {
-   #apiKey {
+   #apiKey,
+   .select_lists {
       width: 400px;
    }
 }
@@ -55,7 +108,8 @@
    color: #fff;
    background-color: #337ab7;
    border-color: #2e6da4;
-   padding: 8px 12px;
+   /* padding: 8px 12px; */
+   padding: 5px 12px;
    border-radius: 4px;
    cursor: pointer;
    border: none;
