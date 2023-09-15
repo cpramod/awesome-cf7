@@ -65,14 +65,20 @@
         $(".a_cf7_ki ._h2 span").css("color", "#1ed41e").text("Enabled");
 		if(!local_storage == ""){
 			$("#apiKey").val(local_storage);
+			apiKey = local_storage;
+			if(all_klaviyo_list.length > 0){
+				append_fetched_data();
+			}else{
+				get_list_from_klaviyo();
+			}			
 		 }	
       } else {
         input_value = $("#a-cf7-custom-field").val();
-        $(".a_cf7_ki .api_input_box").remove();
+        $(".a_cf7_ki .api_input_box, #has_lists ").remove();
         $(".a_cf7_ki ._h2 span").css("color", "#d10707").text("Disabled");
       }
     } else {
-      $(".a_cf7_ki .api_input_box").remove();
+      $(".a_cf7_ki .api_input_box, #has_lists").remove();
     }
   });
 
@@ -87,7 +93,10 @@
   });
 
   function get_list_from_klaviyo(e) {
-    e.preventDefault();
+	if(!e == ""){
+		e.preventDefault();
+	}
+	loader();
     const options = { method: "GET", headers: { accept: "application/json" } };
     fetch("https://a.klaviyo.com/api/v2/lists?api_key=" + apiKey, options)
       .then((response) => response.json())
@@ -95,6 +104,7 @@
         all_klaviyo_list = response;
 		if (all_klaviyo_list.length > 0) {
 		  	append_fetched_data();
+			loader();
 		}
       })
       .catch((err) => console.error(err));
@@ -149,7 +159,7 @@
 													</select>
 												</div>
 											</div>
-											<div class="col-md-4"> <a class="btn btn-danger" onclick="KLCF_remove_custom_field(this);">Remove</a>
+											<div class="col-md-4"> <a class="btn_ btn-danger_" onclick="KLCF_remove_custom_field(this);"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/></a>
 											</div>
 											</div>
 										</div>
@@ -169,7 +179,7 @@
 													</select>
 												</div>
 											</div>
-											<div class="col-md-4"> <a class="btn btn-danger" onclick="KLCF_remove_custom_field(this);">Remove</a>
+											<div class="col-md-4"> <a class="btn_ btn-danger_" onclick="KLCF_remove_custom_field(this);"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/></a>
 											</div>
 											</div>
 										</div>
@@ -178,7 +188,7 @@
 										<div class="row">
 											<div class="col-md-12">
 											<div class="col-md-4 pull-right">
-												<a class="btn btn-primary btn-full" onclick="KLCF_add_custom_field();">Add Fields</a>
+												<a class="btn_ btn-primary_ btn-full" onclick="KLCF_add_custom_field();"><img src="/wp-content/plugins/klaviyo-integration/admin/images/add.svg"/></a>
 											</div>
 											</div>
 										</div>
@@ -186,10 +196,18 @@
 								 </div>
 			`);
 
-		$.each(all_klaviyo_list, function(key,list) {             
-			// console.log(list);         
+		$.each(all_klaviyo_list, function(key,list) {              
 			$('.select_lists .f_list').append('<option value="0">'+list.list_name+'</option>');
-			});     
+		});     
   }
 
+  function loader(){
+    if(all_klaviyo_list.length > 0){
+		$('.a_cf7_ki').removeClass("loader_active");
+		$('.aki7_loader').hide();
+	}else{
+		$('.a_cf7_ki').addClass("loader_active");
+		$('.aki7_loader').show();
+	}
+  }
 })(jQuery);
