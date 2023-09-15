@@ -28,6 +28,17 @@
    * Although scripts in the WordPress core, Plugins and Themes may be
    * practising this, we should strive to set a better example in our own work.
    */
+  var all_klaviyo_list = [];
+  var apiKey;
+  let local_storage = localStorage.getItem("ak7_apiKey");
+
+  if(!local_storage == ""){
+	// $(".a_cf7_ki fieldset").append(append_data);
+	// $(".a_cf7_ki ._h2 span").css("color", "#1ed41e").text("Enabled");
+	// $("#apiKey").val(local_storage);
+	// append_fetched_data()
+ }
+
   $(document).on("click", "#a-cf7-custom-field", function () {
     var input_value = $("#a-cf7-custom-field").val();
     if (input_value == "") {
@@ -35,7 +46,7 @@
     } else {
       input_value = $("#a-cf7-custom-field").val();
     }
-    // console.log("input_value",input_value);
+
     if (input_value[0].defaultValue == "checked" || input_value == "checked") {
       var append_data = `
 			                   <div class="api_input_box">
@@ -49,10 +60,12 @@
 							   </div>
 			`;
       var found = jQuery(".a_cf7_ki").find(".api_input_box");
-      // console.log("found",found.length);
       if (found.length == 0) {
         $(".a_cf7_ki fieldset").append(append_data);
         $(".a_cf7_ki ._h2 span").css("color", "#1ed41e").text("Enabled");
+		if(!local_storage == ""){
+			$("#apiKey").val(local_storage);
+		 }	
       } else {
         input_value = $("#a-cf7-custom-field").val();
         $(".a_cf7_ki .api_input_box").remove();
@@ -63,10 +76,11 @@
     }
   });
 
-  var all_klaviyo_list = [];
-  var apiKey;
   $(document).on("click", ".api_input_box ._button", function (e) {
     apiKey = $("#apiKey").val();
+    if(local_storage == null){
+		localStorage.setItem("ak7_apiKey", apiKey);
+	}
     // var test_call = 'https://a.klaviyo.com/api/v2/lists?api_key='+apiKey
     // console.log("api call", test_call);
     get_list_from_klaviyo(e);
@@ -79,7 +93,6 @@
       .then((response) => response.json())
       .then((response) => {
         all_klaviyo_list = response;
-        console.log("all_klaviyo_list",all_klaviyo_list);
 		if (all_klaviyo_list.length > 0) {
 		  	append_fetched_data();
 		}
@@ -174,7 +187,7 @@
 			`);
 
 		$.each(all_klaviyo_list, function(key,list) {             
-			console.log(list);         
+			// console.log(list);         
 			$('.select_lists .f_list').append('<option value="0">'+list.list_name+'</option>');
 			});     
   }
