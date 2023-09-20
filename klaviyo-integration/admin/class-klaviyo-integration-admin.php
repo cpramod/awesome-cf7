@@ -209,5 +209,140 @@ class Klaviyo_Integration_Admin {
 			// exit;
 		}
 
+
+
+
+
+
+
+		public function KLCF_admin_after_additional_settings() {
+
+			$post_id = sanitize_text_field($_GET['post']);
+			$enable =	get_post_meta($post_id, "_KLCF_enable", true); 
+			$f_data = get_post_meta($post_id, "_KLCF_data", true); 
+			$enable_tag = get_post_meta($post_id, "_KLCF_enable_tag", true); 
+			$custom_tag = get_post_meta($post_id, "_KLCF_custom_tag", true);
+
+			$manager = WPCF7_FormTagsManager::get_instance();
+	
+			$form_tags = $manager->get_scanned_tags();
+	
+			$form_scan_tags = $this->tags_formate_array($form_tags);
+			$auto_field_selected = $this->KLCF_searchField('email',$form_tags);
+	
+			$map_fields = array(
+	
+					[
+						'name' => 'email',
+						'key' => '$email',
+						'required' => true
+					]
+				);
+
+				var_dump($map_fields);
+				exit;
+	
+			if(empty($f_data)){
+			
+				$map_fields[] =	    
+					[
+						'name' => 'first name',
+						'key'  => '$first_name',
+						'required' => false
+					];
+				$map_fields[] =
+					[
+						'name' => 'last name',
+						'key'  => '$last_name',
+						'required' => false
+					];			
+			}else{
+	
+				$map_field[] =	    
+					[
+						'name' => 'first name',
+						'key'  => '$first_name',
+						'required' => false
+					];
+				$map_field[] =
+					[
+						'name' => 'last name',
+						'key'  => '$last_name',
+						'required' => false
+					];
+	
+				$keys = array_keys($f_data);					
+				foreach($map_field as $row){
+					if(in_array($row['key'],$keys)){
+						$map_fields[] = $row;
+					}
+				}
+			}
+	
+			// if()
+	
+			$map_extra_fields = array(
+				[
+					'name' => 'First Name',
+					'key'  => '$first_name',
+					'required' => false
+				],
+				[
+					'name' => 'Last Name',
+					'key'  => '$last_name',
+					'required' => false
+				],
+				[
+					'name' => 'Phone',
+					'key'  => '$phone_number',
+					'required' => false
+				],
+				[
+					'name' => 'City',
+					'key'  => '$city',
+					'required' => false
+				],
+				[
+					'name' => 'Region',
+					'key'  => '$region',
+					'required' => false
+				],
+				[
+					'name' => 'Country',
+					'key'  => '$country',
+					'required' => false
+				],
+				[
+					'name' => 'Zip',
+					'key'  => '$zip',
+					'required' => false
+				],
+	
+			);
+	
+			// include('templates/intregation-form.php');
+			return 0;
+		}
+	
+
+
+
+   
+        // $this->KLCF_admin_after_additional_settings();
 	
 }
+
+// $z = new Klaviyo_Integration_Admin;
+// $z->KLCF_admin_after_additional_settings();
+
+
+
+// foreach($form as $objForm){
+// 	$manager = WPCF7_FormTagsManager::get_instance();
+// 	$tags  = $manager->scan( $objForm->form );
+// 	$filter_result = $manager->filter( $tags, $cond );
+// 	 foreach ($filter_result as $key => $value) {
+// 		 echo $value->type;
+// 		 echo $value->name;
+// 	 }
+//   }

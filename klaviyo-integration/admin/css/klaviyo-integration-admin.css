@@ -25,9 +25,14 @@
    position: relative;
 }
 
+.a_cf7_ki select:focus {
+   border-color: unset;
+   border: none;
+   box-shadow: 0px 0px 4px 0px #2271b1;
+}
+
 .a_cf7_ki input {
    margin-top: 3px;
-   ;
 }
 
 .a_cf7_ki input[type=checkbox]:checked::before {
@@ -109,6 +114,29 @@
    box-shadow: none;
 }
 
+a.btn_ {
+   display: flex;
+   align-items: center;
+   color: #000;
+   cursor: pointer;
+}
+
+a.btn_ img {
+   width: 20px;
+   height: 20px;
+   padding-right: 5px;
+}
+
+a.btn-danger_:hover {
+   color: #d10707;
+   text-decoration: none;
+}
+
+a.btn-primary_:hover {
+   color: #1ed41e;
+   text-decoration: none;
+}
+
 @media (min-width:1024px) {
 
    #apiKey,
@@ -134,7 +162,66 @@
    border-color: #135e96;
 }
 
+#cak {
+   width: 100%;
+}
 
+@media (max-width:767px) {
+   #cak {
+      margin-bottom: 10px;
+   }
+
+   .api_input_box {
+      flex-direction: column;
+      align-items: flex-start;
+   }
+   ._button{
+      width: 100%;
+      margin: 10px 0 0 0 !important;
+   }
+
+   .select_lists {
+      margin-left: 0;
+      margin-top: 10px;
+   }
+
+   #apiKey,
+   .api_box,
+   .select_lists {
+      width: 100%;
+   }
+
+   .a_cf7_ki {
+      padding: 0;
+   }
+
+   .a_cf7_ki fieldset.map-fields {
+      padding: 5px;
+   }
+
+   .add_block .row div {
+      padding: 0;
+   }
+
+   .add_block select {
+      max-width: 100%;
+   }
+
+   .add_block .delete,
+   .add_block .add {
+      justify-content: flex-end;
+      align-items: flex-end;
+      display: flex;
+   }
+
+   .add.pull-right {
+      float: left !important;
+   }
+   .map-fields .row{
+      display: flex;
+      flex-direction: column-reverse;
+   }
+}
 
 /* loader start */
 .aki7_loader {
