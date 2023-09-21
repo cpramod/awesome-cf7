@@ -115,7 +115,7 @@
         if (!e == "") {
             e.preventDefault();
         }
-        loader();
+        loader(0);
         // const options = {
         //     method: "GET",
         //     headers: {
@@ -132,7 +132,7 @@
         //         //console.log("all_klaviyo_list", all_klaviyo_list);
         //         if (all_klaviyo_list.length > 0) {
         //             append_ui();
-        //             loader();
+        //             loader(1);
         //         }
         //     })
         //     .catch((err) => console.error(err));
@@ -149,8 +149,8 @@
                 all_klaviyo_list = response.data.data;
                 //console.log("all_klaviyo_list", all_klaviyo_list);
                 if (all_klaviyo_list.length > 0) {
+                    loader(1);
                     append_ui();
-                    loader();
                 }
             }
         });
@@ -173,7 +173,7 @@
         //     .then(response => response.json())
         //     .then(response => console.log("response for get_list_fields", response))
         //     .catch(err => console.error(err));
-
+        loader(0);
         jQuery.ajax({
             type: "post",
             dataType: "json",
@@ -185,7 +185,8 @@
             },
             success: function(response){
                var single_list = response.data.data;
-                console.log("single_list", single_list);
+               console.log("single_list", single_list);     
+               loader(1);  
             }
         });
     }
@@ -291,8 +292,9 @@
         $(".a_cf7_ki ._h2 span").css("color", "#1ed41e").text("Enabled");
     }
 
-    function loader() {
-        if (all_klaviyo_list.length > 0) {
+    function loader(length) {
+        // if (all_klaviyo_list.length > 0) {
+        if (length > 0) {
             $('.a_cf7_ki').removeClass("loader_active");
             $('.aki7_loader').hide();
         } else {
