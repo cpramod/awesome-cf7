@@ -43,9 +43,11 @@
 	// append_ui()
     // }
 
+  // enable klaviyo integration checkbox	
   $(document).on("click", "#a-cf7-custom-field", function () {
     enter_your_api_key_block();
   });
+  // fetch api key list
   $(document).on("click", ".api_input_box ._button", function (e) {
     apiKey = $("#apiKey").val();
     if(local_storage == null){
@@ -61,58 +63,58 @@
 		get_all_forms_list_from_klaviyo(e);
 	 }
   });
-
+  // choose a klaviyo-list from fetched lists
   $(document).on("change", ".select_lists .f_list option", function () {
 	console.log("$(this)",$(this));
     selected_klaviyo_list = $(this).val();
 	//console.log("selected_klaviyo_list",selected_klaviyo_list);
 	get_list_fields()
   });
-function enter_your_api_key_block(){
-	var input_value = $("#a-cf7-custom-field").val();
-    // if (input_value == "") {
-    //   input_value = $("#a-cf7-custom-field").val("checked");
-    // } else {
-    //   input_value = $("#a-cf7-custom-field").val();
-    // }
-	if (input_value == "") {
-		input_value = $("#a-cf7-custom-field").val("checked");
-	}
+  function enter_your_api_key_block(){
+		var input_value = $("#a-cf7-custom-field").val();
+		// if (input_value == "") {
+		//   input_value = $("#a-cf7-custom-field").val("checked");
+		// } else {
+		//   input_value = $("#a-cf7-custom-field").val();
+		// }
+		if (input_value == "") {
+			input_value = $("#a-cf7-custom-field").val("checked");
+		}
 
-    if (input_value[0].defaultValue == "checked" || input_value == "checked") {
-      var append_data = `
-			                   <div class="api_input_box">
-							          <div class="api_box">
-										<label>Enter Your Api Key:</label>
-										<div>
-											<input type="text" id="apiKey" name="apiKey"> 
-											<button class="_button">Fetch Klaviyo Lists</button>
+		if (input_value[0].defaultValue == "checked" || input_value == "checked") {
+		var append_data = `
+								<div class="api_input_box">
+										<div class="api_box">
+											<label>Enter Your Api Key:</label>
+											<div>
+												<input type="text" id="apiKey" name="apiKey"> 
+												<button class="_button">Fetch Klaviyo Lists</button>
+											</div>
 										</div>
-									  </div>
-							   </div>
-			`;
-      var found = $(".a_cf7_ki").find(".api_input_box");
-      if (found.length == 0) {
-        $(".a_cf7_ki fieldset").append(append_data);
-        // $(".a_cf7_ki ._h2 span").css("color", "#1ed41e").text("Enabled");
-		if(!local_storage == ""){
-			$("#apiKey").val(local_storage);
-			apiKey = local_storage;
-			if(all_klaviyo_list.length > 0){
-				append_ui(); 
-			}else{
-				get_all_forms_list_from_klaviyo();
-			}			
-		 }	
-      } else {
-        input_value = $("#a-cf7-custom-field").val();
-        $(".a_cf7_ki .api_input_box, #has_lists ").remove();
-        // $(".a_cf7_ki ._h2 span").css("color", "#d10707").text("Disabled");
-      }
-    } else {
-      $(".a_cf7_ki .api_input_box, #has_lists").remove();
-    }
-}
+								</div>
+				`;
+		var found = $(".a_cf7_ki").find(".api_input_box");
+		if (found.length == 0) {
+			$(".a_cf7_ki fieldset").append(append_data);
+			// $(".a_cf7_ki ._h2 span").css("color", "#1ed41e").text("Enabled");
+			if(!local_storage == ""){
+				$("#apiKey").val(local_storage);
+				apiKey = local_storage;
+				if(all_klaviyo_list.length > 0){
+					append_ui(); 
+				}else{
+					get_all_forms_list_from_klaviyo();
+				}			
+			}	
+		} else {
+			input_value = $("#a-cf7-custom-field").val();
+			$(".a_cf7_ki .api_input_box, #has_lists ").remove();
+			// $(".a_cf7_ki ._h2 span").css("color", "#d10707").text("Disabled");
+		}
+		} else {
+		$(".a_cf7_ki .api_input_box, #has_lists").remove();
+		}
+  }
   function get_all_forms_list_from_klaviyo(e) {
 	if(!e == ""){
 		e.preventDefault();
@@ -257,12 +259,15 @@ function enter_your_api_key_block(){
 		$('.aki7_loader').show();
 	}
   }
+  // custom -- add button
   $(document).on("click", ".add", function () {
 	custom_adding_field_block()
   });
+  // custom -- delete button
   $(document).on("click", ".delete", function () {
 	$(this).closest(".add_block").remove();
   });
+  // change api key button
   $(document).on("click", "#cak", function (e) {
 	e.preventDefault();
 	localStorage.removeItem("ak7_apiKey");
