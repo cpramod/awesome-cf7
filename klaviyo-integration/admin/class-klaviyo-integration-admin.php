@@ -389,7 +389,7 @@ class Klaviyo_Integration_Admin {
                         );
                         //  print_r($html); exit;
 
-                      // wp_send_json_success(json_encode($html));
+                       wp_send_json_success(json_encode($html));
                       
 
                 }
