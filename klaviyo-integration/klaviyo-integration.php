@@ -55,6 +55,7 @@ function deactivate_klaviyo_integration() {
 	Klaviyo_Integration_Deactivator::deactivate();
 }
 
+
 register_activation_hook( __FILE__, 'activate_klaviyo_integration' );
 register_deactivation_hook( __FILE__, 'deactivate_klaviyo_integration' );
 

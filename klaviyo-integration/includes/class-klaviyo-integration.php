@@ -157,14 +157,18 @@ class Klaviyo_Integration {
 
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-        $this->loader->add_action( 'wp_ajax_nopriv_get_data', $plugin_admin,'my_ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_get_data', $plugin_admin,'my_ajax_handler' );
 
         // ***** custom added ***** //
         $this->loader->add_action('admin_menu', $plugin_admin, 'settings_menu');
         $this->loader->add_filter('wpcf7_editor_panels', $plugin_admin,'add_cf7_panel');
-        $this->loader->add_action('save_post', $plugin_admin,'save_a_cf7_custom_fields');
-        //$this->loader->add_action('save_post', $plugin_admin, array($this,'save_a_cf7_custom_fields'));
+        $this->loader->add_action('save_post', $plugin_admin,'save_awesome_cf7_klaviyo_custom_fields',10, 3);
+        //$this->loader->add_action('save_post', $plugin_admin, array($this,'save_awesome_cf7_klaviyo_custom_fields'));
+        $this->loader->add_action( 'wp_ajax_nopriv_get_data', $plugin_admin,'my_ajax_handler' );
+        $this->loader->add_action( 'wp_ajax_get_data', $plugin_admin,'my_ajax_handler' );
+        
+        // ***** custom made ***** //
+        $this->loader->add_action( 'admin_notices',$plugin_admin,'c_aki_cf7' );
+        $this->loader->add_action( 'wp_aki_cf7_db', $plugin_admin,'aki_cf7_db' );
 
     }
 

@@ -10,6 +10,8 @@
  * @subpackage Klaviyo_Integration/admin
  */
 
+use GuzzleHttp\Psr7\Response;
+
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -40,6 +42,7 @@ class Klaviyo_Integration_Admin {
      */
     private $version;
 
+
     /**
      * Initialize the class and set its properties.
      *
@@ -51,7 +54,7 @@ class Klaviyo_Integration_Admin {
 
         $this->plugin_name = $plugin_name;
         $this->version = $version;
-        // add_action('admin_menu', array($this, 'addAdminMenuItems'), 9);
+       // include 'partials/api_call.php';
     }
 
     /**
@@ -103,6 +106,14 @@ class Klaviyo_Integration_Admin {
         wp_enqueue_script($this->plugin_name.'337', plugin_dir_url( __FILE__ ) . 'js/bootstrap_min_3_3_7.js', array( 'jquery' ), $this->version, false );
 
     }
+    function c_aki_cf7() {
+        do_action( 'wp_aki_cf7_db' );
+    }
+
+    public function aki_cf7_db(){
+        require_once 'partials/aki_cf7_database.php';
+    }
+
 
     // public function addAdminMenuItems() {
     //  //add_menu_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', string $icon_url = '', int $position = null )
@@ -180,13 +191,28 @@ class Klaviyo_Integration_Admin {
     * @param WPCF7_ContactForm $post - modified post type object from Contact Form 7 containing information about the current contact form
     */
     function wpcf7_custom_fields ($post) {
+        $post_id = $post->ID();
+        // $checked = get_option('akicf7_'.$post_id.'_enable_checkbox');
+
+        // $apiKey = "";
+        $apiKey = get_option('akicf7_'.$post_id.'_apikey');
         ?>
-        <div class="a_cf7_ki">
+        <div id="akicf7">
             <h2 class="_h2"><?php echo esc_html( __( 'Integration Status:', 'contact-form-7' ) ); ?><span>Disabled</span></h2>
             <fieldset>
-                <!-- <legend></legend> -->
-                    <label for="a-cf7-custom-field">Enable Klaviyo Integration: </label>
-                    <input type="checkbox" id="a-cf7-custom-field" name="a-cf7-custom-field" value=""/>
+                    <label for="akicf7_label">Enable Klaviyo Integration: </label>
+                    <!-- <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" <?php // echo $checked == 'checked'?'checked':''; ?> value=""/> -->
+                    <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" <?php echo $apiKey ?'checked':''; ?> value=""/>
+                        <div class="akicf7_api_input <?php echo $apiKey  ? 'enable' : 'disable'; ?> ">
+                            <div class="akicf7_api_box">
+                                <label>Enter Your Api Key:</label>
+                                <div>
+                                    <input type="text" id="akicf7_apikey" name="akicf7_apikey" value="<?php echo $apiKey ? $apiKey : '' ;?>"> 
+                                    <button class="akicf7_fetch_all_lists">Fetch Klaviyo Lists</button>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" value="test" name="form_name_action">
             </fieldset>
             <div class="aki7_loader"></div>
         </div>
@@ -197,71 +223,185 @@ class Klaviyo_Integration_Admin {
         * @param $post_id - post ID of the current post being saved
         */
 
-        function save_a_cf7_custom_fields($post_id) {
-            if (array_key_exists('a-cf7-custom-field', $_POST)) {
-                update_post_meta(
-                    $post_id,
-                    'custom_field',
-                    $_POST['a-cf7-custom-field']
-                );
+        function save_awesome_cf7_klaviyo_custom_fields($post_id, $post, $update) {
+
+            if($update){
+                update_option('akicf7_'.$post_id.'_enable_checkbox', $_POST['akicf7_checkbox']);
+                update_option('akicf7_'.$post_id.'_apikey', $_POST['akicf7_apikey']);
+            }else{
+                add_option('akicf7_'.$post_id.'_enable_checkbox', $_POST['akicf7_checkbox']);
+                add_option('akicf7_'.$post_id.'_apikey', $_POST['akicf7_apikey']);
             }
-            // var_dump($post_id);
-            // exit;
+         
         }
 
 
 
         public function my_ajax_handler() {
             $data = $_POST;
+            // print_r($data);
 
             require_once(plugin_dir_path( dirname( __FILE__ ) ) .'vendor/autoload.php');
 
             $client = new \GuzzleHttp\Client();
 
-            if(array_key_exists("listId",$data)){
-                $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/'.$data["listId"], [
-                    'headers' => [
-                        'Authorization' => 'Klaviyo-API-Key '.$data["api"],
-                        'accept' => 'application/json',
-                        'revision' => '2023-09-15',
-                    ],
-                    ]);
-            }else{
-                $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/', [
-                    'headers' => [
-                        'Authorization' => 'Klaviyo-API-Key '.$data["api"],
-                        'accept' => 'application/json',
-                        'revision' => '2023-09-15',
-                    ],
-                    ]);
-            }
+            try {
+                if(array_key_exists("listId",$data)){
+                    $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/'.$data["listId"], [
+                        'headers' => [
+                            'Authorization' => 'Klaviyo-API-Key '.$data["api"],
+                            'accept' => 'application/json',
+                            'revision' => '2023-09-15',
+                        ],
+                        ]);
 
-            $res = json_decode($response->getBody());
-            // echo $response->getBody();
+                     $res = json_decode($response->getBody());
+                     wp_send_json_success($res);
 
-            wp_send_json_success($res);
+                }else{
+                    $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/', [
+                        'headers' => [
+                            'Authorization' => 'Klaviyo-API-Key '.$data["api"],
+                            'accept' => 'application/json',
+                            'revision' => '2023-09-15',
+                        ],
+                        ]);
+                        $res = json_decode($response->getBody());
+                        $newArray = (array)$res->data;
+
+                        $lists = "";
+                        $apiKey= $data["api"];
+                        foreach($newArray as $list){
+                            $lists .= "<option value=". $list->id .">". $list->attributes->name ."</option>";              
+                        }
+                        $a = ($apiKey ? "checked" : "");
+                        $b = ($apiKey ? "enable" : "disable");
+                        $c = ($apiKey ? $apiKey :"");
+                        
+                        $html = array(
+                            'html' => '
+                                    <div id="akicf7_app">
+                                        <h2 class="akicf7_enabled">Integration Status:<span>Enabled</span></h2>
+                                        <fieldset>
+                                                <label for="akicf7_label">Enable Klaviyo Integration: </label>
+                                                <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" '. $a .' value=""/>
+                                                    <div class="akicf7_api_input '.$b .' ">
+                                                        <div class="akicf7_api_box">
+                                                           <div>
+                                                                    <label>Enter Your Api Key:</label>
+                                                                    <input type="text" id="akicf7_apikey" name="akicf7_apikey" value="'. $c .'" disabled="akicf7_apikey">
+                                                           </div> 
+                                                            <div class="akicf7_select_list">
+                                                                <label>Select Klaviyo List</label>
+                                                                <select class="form-control_ akicf7_lists" required="">
+                                                                '. $lists .'
+                                                                </select>
+                                                            </div>   
+                                                        </div>
+                                                    </div>
+                                        </fieldset>         
+                                        
+                                        <div id="has_lists">
+                                                <fieldset class="map-fields">
+                                        
+                                                <div class="row">
+                                                    <div class="col-md-9"> 
+                                                    <h2>Map Fields:</h2>
+                                                    <div class="form-group akicf7_map_block">
+                                                        <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="col-md-4">
+                                                                <label>Email<span> *</span></label>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <select class="form-control" required="" name="">
+                                                                    <option value="0">Select</option>
+                                                                    <option value="your-name">Your Name</option>
+                                                                    <option value="your-email">Your Email</option>
+                                                                    <option value="your-subject">Your Subject</option>
+                                                                    <option value="your-message">Your Message</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group akicf7_map_block">
+                                                        <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="col-md-4">
+                                                                <label>First Name</label>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <select class="form-control" required="" name="">
+                                                                    <option value="0">Select</option>
+                                                                    <option value="your-name">Your Name</option>
+                                                                    <option value="your-email">Your Email</option>
+                                                                    <option value="your-subject">Your Subject</option>
+                                                                    <option value="your-message">Your Message</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/>Remove</a>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group akicf7_map_block">
+                                                        <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="col-md-4">
+                                                                <label>Last Name</label>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <select class="form-control" required="" name="">
+                                                                    <option value="0">Select</option>
+                                                                    <option value="your-name">Your Name</option>
+                                                                    <option value="your-email">Your Email</option>
+                                                                    <option value="your-subject">Your Subject</option>
+                                                                    <option value="your-message">Your Message</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/>Remove</a>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="add_on_fields">
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                        <div class="col-md-3 pull-right akicf7_add_block">
+                                                            <a class=" btn_ btn-primary_ btn-full" ><img src="/wp-content/plugins/klaviyo-integration/admin/images/add.svg"/>Add Field</a>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                        
+                                                    <div class="col-md-3"> 
+                                                    <button id="cak">Change Api Key</button>
+                                                </div>
+                                                </div>
+                                                </fieldset> 
+                                        
+                                    <div class="aki7_loader"></div>
+                                    </div>
+
+                            ',
+                        );
+                        //  print_r($html); exit;
+
+                      // wp_send_json_success(json_encode($html));
+                      
+
+                }
+              } catch(Exception $e) {
+                $errr = [];
+                $errr['error'] = true;     
+                wp_send_json_error($errr);               
+              }
+
+                // $res = json_decode($response->getBody());
+                // wp_send_json_success($res);
         }
-
-
-
-        // public function fetch_single_list_handler() {
-        //     $data = $_POST;
-            
-        //     require_once(plugin_dir_path( dirname( __FILE__ ) ) .'vendor/autoload.php');
-
-        //     $client = new \GuzzleHttp\Client();
-
-        //     $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/'.$data["listId"], [
-        //     'headers' => [
-        //         'Authorization' => 'Klaviyo-API-Key '.$data["api"],
-        //         'accept' => 'application/json',
-        //         'revision' => '2023-09-15',
-        //     ],
-        //     ]);
-        //     $res = json_decode($response->getBody());
-        //     wp_send_json_success($res);
-        // }
-
 
 
 
