@@ -388,7 +388,7 @@ button.akicf7_fetch_all_lists {
 }
 
 
-.akicf7_map_block img,
+.akicf7_block img,
 .akicf7_add_block img{
    width: 20px;
    height: 20px;
@@ -440,14 +440,14 @@ button.akicf7_fetch_all_lists {
    display: flex;
    flex-direction: column-reverse;
 }
-.akicf7_map_block .delete{
+.akicf7_block .delete{
    display: flex;
    justify-content: end;
 }
 .akicf7_map_block{
    margin-bottom: 5px !important;
 }
-.akicf7_map_block .row>div:first-child,
+.akicf7_block .row>div:first-child,
 .akicf7_add_block{
    padding: 0 !important;
 }

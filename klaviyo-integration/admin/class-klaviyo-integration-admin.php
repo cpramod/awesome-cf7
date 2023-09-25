@@ -199,6 +199,9 @@ class Klaviyo_Integration_Admin {
         // $checked = get_option('akicf7_'.$post_id.'_enable_checkbox');
 
         $apiKey = get_option('akicf7_'.$post_id.'_apikey');
+      
+            // var_dump($apiKey);
+            // exit;
         ?>
         <div id="akicf7">
             <h2 class="_h2"><?php echo esc_html( __( 'Integration Status:', 'contact-form-7' ) ); ?><span>Disabled</span></h2>
@@ -215,7 +218,7 @@ class Klaviyo_Integration_Admin {
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" value="test" name="form_name_action">
+                        <input id="post_id" type="hidden" value="<?php echo $post_id ?>" name="post_id">
             </fieldset>
             <div class="aki7_loader"></div>
         </div>
@@ -227,6 +230,13 @@ class Klaviyo_Integration_Admin {
         */
 
         function save_awesome_cf7_klaviyo_custom_fields($post_id, $post, $update) {
+
+            // $ContactForm = WPCF7_ContactForm::get_instance(24);
+            // $form_fields = $ContactForm->scan_form_tags();
+            // echo "<pre>";
+            // print_r($form_fields);
+            // echo "</pre>";
+            // exit;
 
             if($update){
                 update_option('akicf7_'.$post_id.'_enable_checkbox', $_POST['akicf7_checkbox']);
@@ -242,10 +252,7 @@ class Klaviyo_Integration_Admin {
 
         public function my_ajax_handler() {
             $data = $_POST;
-            // print_r($data);
-
             require_once(plugin_dir_path( dirname( __FILE__ ) ) .'vendor/autoload.php');
-
             $client = new \GuzzleHttp\Client();
 
             try {
@@ -272,6 +279,8 @@ class Klaviyo_Integration_Admin {
                         $res = json_decode($response->getBody());
                         $newArray = (array)$res->data;
 
+                       
+                        // klaviyo all lists start ****
                         $lists = "";
                         $apiKey= $data["api"];
                         foreach($newArray as $list){
@@ -280,6 +289,23 @@ class Klaviyo_Integration_Admin {
                         $a = ($apiKey ? "checked" : "");
                         $b = ($apiKey ? "enable" : "disable");
                         $c = ($apiKey ? $apiKey :"");
+
+                        // contact-form-7 start ****
+                        $ContactForm = WPCF7_ContactForm::get_instance($data["post_id"]);
+                        $form_fields = $ContactForm->scan_form_tags();        
+                        $fields = "";
+                        $fields_name = [];
+                        foreach($form_fields as $field){      
+                             $trimmed = ucwords(trim($field->raw_name, "your-"));                     
+                             array_push($fields_name, $trimmed);
+                             $fields .= "<option value=". $field->basetype .">". $trimmed  ."</option>";         
+                        }    
+                        array_pop($fields_name);
+
+                        // echo "<pre>";
+                        // var_dump($fields);
+                        // exit;
+                        //  --------------------------
                         
                         $html = array(
                             'html' => '
@@ -310,37 +336,29 @@ class Klaviyo_Integration_Admin {
                                                 <div class="row reverse">
                                                     <div class="col-md-9"> 
                                                     <h2>Map Fields:</h2>
-                                                    <div class="form-group akicf7_map_block">
+                                                    <div class="form-group akicf7_block">
                                                         <div class="row">
                                                         <div class="col-md-9">
                                                             <div class="col-md-4">
-                                                                <label>Email<span> *</span></label>
+                                                                <label>'.$fields_name[1].'<span> *</span></label>
                                                             </div>
                                                             <div class="col-md-8">
                                                                 <select class="form-control" required="" name="">
-                                                                    <option value="0">Select</option>
-                                                                    <option value="your-name">Your Name</option>
-                                                                    <option value="your-email">Your Email</option>
-                                                                    <option value="your-subject">Your Subject</option>
-                                                                    <option value="your-message">Your Message</option>
+                                                                    '.$fields.'
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group akicf7_map_block">
+                                                    <div class="form-group akicf7_block">
                                                         <div class="row">
                                                         <div class="col-md-9">
                                                             <div class="col-md-4">
-                                                                <label>First Name</label>
+                                                                <label>'.$fields_name[2].'</label>
                                                             </div>
                                                             <div class="col-md-8">
                                                                 <select class="form-control" required="" name="">
-                                                                    <option value="0">Select</option>
-                                                                    <option value="your-name">Your Name</option>
-                                                                    <option value="your-email">Your Email</option>
-                                                                    <option value="your-subject">Your Subject</option>
-                                                                    <option value="your-message">Your Message</option>
+                                                                   '.$fields.'
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -348,19 +366,15 @@ class Klaviyo_Integration_Admin {
                                                         </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group akicf7_map_block">
+                                                    <div class="form-group akicf7_block">
                                                         <div class="row">
                                                         <div class="col-md-9">
                                                             <div class="col-md-4">
-                                                                <label>Last Name</label>
+                                                                <label>'.$fields_name[3].'</label>
                                                             </div>
                                                             <div class="col-md-8">
                                                                 <select class="form-control" required="" name="">
-                                                                    <option value="0">Select</option>
-                                                                    <option value="your-name">Your Name</option>
-                                                                    <option value="your-email">Your Email</option>
-                                                                    <option value="your-subject">Your Subject</option>
-                                                                    <option value="your-message">Your Message</option>
+                                                                   '.$fields.'
                                                                 </select>
                                                             </div>
                                                         </div>
