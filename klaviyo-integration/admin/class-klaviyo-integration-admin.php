@@ -106,14 +106,18 @@ class Klaviyo_Integration_Admin {
         wp_enqueue_script($this->plugin_name.'337', plugin_dir_url( __FILE__ ) . 'js/bootstrap_min_3_3_7.js', array( 'jquery' ), $this->version, false );
 
     }
-    function c_aki_cf7() {
-        do_action( 'wp_aki_cf7_db' );
-    }
 
-    public function aki_cf7_db(){
-        require_once 'partials/aki_cf7_database.php';
-    }
 
+    // function c_aki_cf7() {
+    //     do_action( 'wp_aki_cf7_db' );
+    // }
+
+    // public function aki_cf7_db(){
+    //     require_once 'partials/aki_cf7_database.php';
+    // }
+
+
+    
 
     // public function addAdminMenuItems() {
     //  //add_menu_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', string $icon_url = '', int $position = null )
@@ -194,7 +198,6 @@ class Klaviyo_Integration_Admin {
         $post_id = $post->ID();
         // $checked = get_option('akicf7_'.$post_id.'_enable_checkbox');
 
-        // $apiKey = "";
         $apiKey = get_option('akicf7_'.$post_id.'_apikey');
         ?>
         <div id="akicf7">

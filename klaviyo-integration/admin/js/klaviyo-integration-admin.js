@@ -12,7 +12,7 @@
          setTimeout(()=>{
             apiKey =  $('#akicf7_apikey').val().trim();
             if(apiKey != "" ){
-                // localStorage.setItem("aki", apiKey);
+                localStorage.setItem("aki", apiKey);
                 get_all_forms_list_from_klaviyo(null);
             }
          },500);
@@ -27,7 +27,7 @@
         $(document).on("click", ".akicf7_fetch_all_lists", function(e) {
             apiKey = $("#akicf7_apikey").val();
             if (local_storage == null) {
-                // localStorage.setItem("aki", apiKey);
+                localStorage.setItem("aki", apiKey);
             }
             if (apiKey == "") {
                 e.preventDefault();

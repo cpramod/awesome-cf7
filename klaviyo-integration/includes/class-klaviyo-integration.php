@@ -167,8 +167,8 @@ class Klaviyo_Integration {
         $this->loader->add_action( 'wp_ajax_get_data', $plugin_admin,'my_ajax_handler' );
         
         // ***** custom made ***** //
-        $this->loader->add_action( 'admin_notices',$plugin_admin,'c_aki_cf7' );
-        $this->loader->add_action( 'wp_aki_cf7_db', $plugin_admin,'aki_cf7_db' );
+        // $this->loader->add_action( 'admin_notices',$plugin_admin,'c_aki_cf7' );
+        // $this->loader->add_action( 'wp_aki_cf7_db', $plugin_admin,'aki_cf7_db' );
 
     }
 
