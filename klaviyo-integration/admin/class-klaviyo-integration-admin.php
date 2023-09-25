@@ -203,7 +203,7 @@ class Klaviyo_Integration_Admin {
                     <label for="akicf7_label">Enable Klaviyo Integration: </label>
                     <!-- <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" <?php // echo $checked == 'checked'?'checked':''; ?> value=""/> -->
                     <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" <?php echo $apiKey ?'checked':''; ?> value=""/>
-                        <div class="akicf7_api_input <?php echo $apiKey  ? 'enable' : 'disable'; ?> ">
+                        <div class="akicf7_api_input inital <?php echo $apiKey  ? 'enable' : 'disable'; ?> ">
                             <div class="akicf7_api_box">
                                 <label>Enter Your Api Key:</label>
                                 <div>
@@ -301,10 +301,10 @@ class Klaviyo_Integration_Admin {
                                                     </div>
                                         </fieldset>         
                                         
-                                        <div id="has_lists">
+                                        <div id="akicf7_has_lists">
                                                 <fieldset class="map-fields">
                                         
-                                                <div class="row">
+                                                <div class="row reverse">
                                                     <div class="col-md-9"> 
                                                     <h2>Map Fields:</h2>
                                                     <div class="form-group akicf7_map_block">
@@ -389,7 +389,7 @@ class Klaviyo_Integration_Admin {
                         );
                         //  print_r($html); exit;
 
-                       wp_send_json_success(json_encode($html));
+                      wp_send_json_success(json_encode($html));
                       
 
                 }
