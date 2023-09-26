@@ -42,6 +42,8 @@ class Klaviyo_Integration_Admin {
      */
     private $version;
 
+    // private $fields_name;
+
 
     /**
      * Initialize the class and set its properties.
@@ -51,9 +53,10 @@ class Klaviyo_Integration_Admin {
      * @param      string    $version    The version of this plugin.
      */
     public function __construct( $plugin_name, $version ) {
-
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+        //$this->fields_name = $fields_name;  //$fields_name=['test1','test']
+
        // include 'partials/api_call.php';
     }
 
@@ -63,7 +66,6 @@ class Klaviyo_Integration_Admin {
      * @since    1.0.0
      */
     public function enqueue_styles() {
-
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -199,9 +201,6 @@ class Klaviyo_Integration_Admin {
         // $checked = get_option('akicf7_'.$post_id.'_enable_checkbox');
 
         $apiKey = get_option('akicf7_'.$post_id.'_apikey');
-      
-            // var_dump($apiKey);
-            // exit;
         ?>
         <div id="akicf7">
             <h2 class="_h2"><?php echo esc_html( __( 'Integration Status:', 'contact-form-7' ) ); ?><span>Disabled</span></h2>
@@ -230,11 +229,8 @@ class Klaviyo_Integration_Admin {
         */
 
         function save_awesome_cf7_klaviyo_custom_fields($post_id, $post, $update) {
-
-            // $ContactForm = WPCF7_ContactForm::get_instance(24);
-            // $form_fields = $ContactForm->scan_form_tags();
             // echo "<pre>";
-            // print_r($form_fields);
+            // print_r($_POST);
             // echo "</pre>";
             // exit;
 
@@ -286,39 +282,73 @@ class Klaviyo_Integration_Admin {
                         foreach($newArray as $list){
                             $lists .= "<option value=". $list->id .">". $list->attributes->name ."</option>";              
                         }
-                        $a = ($apiKey ? "checked" : "");
-                        $b = ($apiKey ? "enable" : "disable");
-                        $c = ($apiKey ? $apiKey :"");
+                        $checked_unchecked = ($apiKey ? "checked" : "");
+                        $enable_disable = ($apiKey ? "enable" : "disable");
+                        $key = ($apiKey ? $apiKey :"");
 
                         // contact-form-7 start ****
                         $ContactForm = WPCF7_ContactForm::get_instance($data["post_id"]);
                         $form_fields = $ContactForm->scan_form_tags();        
-                        $fields = "";
+                        $fields = "<option value='select'>Select</option>";
+
                         $fields_name = [];
                         foreach($form_fields as $field){      
-                             $trimmed = ucwords(trim($field->raw_name, "your-"));                     
-                             array_push($fields_name, $trimmed);
-                             $fields .= "<option value=". $field->basetype .">". $trimmed  ."</option>";         
+                             $trimmed = ucwords(trim($field->raw_name, "your-")); 
+                             if($trimmed != ""){
+                                array_push($fields_name, $trimmed);
+                                $fields .= "<option value=". $field->basetype .">". $trimmed  ."</option>";  
+                             }                                                    
                         }    
                         array_pop($fields_name);
 
-                        // echo "<pre>";
-                        // var_dump($fields);
-                        // exit;
-                        //  --------------------------
+                        $blocks = "";
+                        foreach($form_fields as $field){      
+                            $trimmed = ucwords(trim($field->raw_name, "your-"));     
+                            $check_asterik = $field->type; 
+                            if(strpos($check_asterik, "*") !== false){
+                                $astrik = "*";
+                                $remove_btn = '';
+                            }else{
+                                $astrik = "";
+                                $remove_btn = '<div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/>Remove</a></div>';
+                            }
+                            if($trimmed != ""){
+                                $blocks .= '                          
+                                            <div class="form-group akicf7_block">
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <div class="col-md-4">
+                                                        <label>'.$trimmed.'<span> '.$astrik.'</span></label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <select class="form-control" required="" name="">
+                                                            '.$fields.'
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                '.$remove_btn.'
+                                            </div>
+                                        </div>                                   
+                                ';
+                            }
+                       }    
+                      //  --------------------------
                         
+                        $cf7_extra_fields = array("Phone","City","zip","Go Pro ..");
+                        $merged_cf7_fields = array_merge($fields_name, $cf7_extra_fields);
+
                         $html = array(
                             'html' => '
                                     <div id="akicf7_app">
                                         <h2 class="akicf7_enabled">Integration Status:<span>Enabled</span></h2>
                                         <fieldset>
                                                 <label for="akicf7_label">Enable Klaviyo Integration: </label>
-                                                <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" '. $a .' value=""/>
-                                                    <div class="akicf7_api_input '.$b .' ">
+                                                <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" '. $checked_unchecked .' value=""/>
+                                                    <div class="akicf7_api_input '.$enable_disable .' ">
                                                         <div class="akicf7_api_box">
                                                            <div>
                                                                     <label>Enter Your Api Key:</label>
-                                                                    <input type="text" id="akicf7_apikey" name="akicf7_apikey" value="'. $c .'" disabled="akicf7_apikey">
+                                                                    <input type="text" id="akicf7_apikey" name="akicf7_apikey" value="'. $key .'" disabled="akicf7_apikey">
                                                            </div> 
                                                             <div class="akicf7_select_list">
                                                                 <label>Select Klaviyo List</label>
@@ -336,61 +366,20 @@ class Klaviyo_Integration_Admin {
                                                 <div class="row reverse">
                                                     <div class="col-md-9"> 
                                                     <h2>Map Fields:</h2>
-                                                    <div class="form-group akicf7_block">
-                                                        <div class="row">
-                                                        <div class="col-md-9">
-                                                            <div class="col-md-4">
-                                                                <label>'.$fields_name[1].'<span> *</span></label>
-                                                            </div>
-                                                            <div class="col-md-8">
-                                                                <select class="form-control" required="" name="">
-                                                                    '.$fields.'
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group akicf7_block">
-                                                        <div class="row">
-                                                        <div class="col-md-9">
-                                                            <div class="col-md-4">
-                                                                <label>'.$fields_name[2].'</label>
-                                                            </div>
-                                                            <div class="col-md-8">
-                                                                <select class="form-control" required="" name="">
-                                                                   '.$fields.'
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/>Remove</a>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group akicf7_block">
-                                                        <div class="row">
-                                                        <div class="col-md-9">
-                                                            <div class="col-md-4">
-                                                                <label>'.$fields_name[3].'</label>
-                                                            </div>
-                                                            <div class="col-md-8">
-                                                                <select class="form-control" required="" name="">
-                                                                   '.$fields.'
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/>Remove</a>
-                                                        </div>
-                                                        </div>
-                                                    </div>
+
+                                                    '.$blocks.'
+
                                                     <div id="add_on_fields">
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                         <div class="col-md-3 pull-right akicf7_add_block">
-                                                            <a class=" btn_ btn-primary_ btn-full" ><img src="/wp-content/plugins/klaviyo-integration/admin/images/add.svg"/>Add Field</a>
+                                                            <a  onclick="custom_adding_field_block();" class=" btn_ btn-primary_ btn-full" ><img src="/wp-content/plugins/klaviyo-integration/admin/images/add.svg"/>Add Field</a>
                                                         </div>
                                                         </div>
                                                     </div>
+
+                                                    
                                                     </div>
                                         
                                                     <div class="col-md-3"> 
@@ -399,16 +388,17 @@ class Klaviyo_Integration_Admin {
                                                 </div>
                                                 </fieldset> 
                                         
-                                    <div class="aki7_loader"></div>
+                                           <div class="aki7_loader"></div>
                                     </div>
 
                             ',
+                            'cf7_select_fields'=> $merged_cf7_fields,
+                            'klaviyo_select_fields'=> "in progress",
                         );
-                        //  print_r($html); exit;
-
+                        // echo "<pre>";
+                        // print_r($html);exit;
                       wp_send_json_success(json_encode($html));
                       
-
                 }
               } catch(Exception $e) {
                 $errr = [];
@@ -416,142 +406,10 @@ class Klaviyo_Integration_Admin {
                 wp_send_json_error($errr);               
               }
 
-                // $res = json_decode($response->getBody());
-                // wp_send_json_success($res);
+              
         }
 
 
-
-
-        public function KLCF_admin_after_additional_settings() {
-
-            $post_id = sanitize_text_field($_GET['post']);
-            $enable =   get_post_meta($post_id, "_KLCF_enable", true); 
-            $f_data = get_post_meta($post_id, "_KLCF_data", true); 
-            $enable_tag = get_post_meta($post_id, "_KLCF_enable_tag", true); 
-            $custom_tag = get_post_meta($post_id, "_KLCF_custom_tag", true);
-
-            $manager = WPCF7_FormTagsManager::get_instance();
-    
-            $form_tags = $manager->get_scanned_tags();
-    
-            $form_scan_tags = $this->tags_formate_array($form_tags);
-            $auto_field_selected = $this->KLCF_searchField('email',$form_tags);
-    
-            $map_fields = array(
-    
-                    [
-                        'name' => 'email',
-                        'key' => '$email',
-                        'required' => true
-                    ]
-                );
-
-                var_dump($map_fields);
-                exit;
-    
-            if(empty($f_data)){
-            
-                $map_fields[] =     
-                    [
-                        'name' => 'first name',
-                        'key'  => '$first_name',
-                        'required' => false
-                    ];
-                $map_fields[] =
-                    [
-                        'name' => 'last name',
-                        'key'  => '$last_name',
-                        'required' => false
-                    ];          
-            }else{
-    
-                $map_field[] =      
-                    [
-                        'name' => 'first name',
-                        'key'  => '$first_name',
-                        'required' => false
-                    ];
-                $map_field[] =
-                    [
-                        'name' => 'last name',
-                        'key'  => '$last_name',
-                        'required' => false
-                    ];
-    
-                $keys = array_keys($f_data);                    
-                foreach($map_field as $row){
-                    if(in_array($row['key'],$keys)){
-                        $map_fields[] = $row;
-                    }
-                }
-            }
-    
-            // if()
-    
-            $map_extra_fields = array(
-                [
-                    'name' => 'First Name',
-                    'key'  => '$first_name',
-                    'required' => false
-                ],
-                [
-                    'name' => 'Last Name',
-                    'key'  => '$last_name',
-                    'required' => false
-                ],
-                [
-                    'name' => 'Phone',
-                    'key'  => '$phone_number',
-                    'required' => false
-                ],
-                [
-                    'name' => 'City',
-                    'key'  => '$city',
-                    'required' => false
-                ],
-                [
-                    'name' => 'Region',
-                    'key'  => '$region',
-                    'required' => false
-                ],
-                [
-                    'name' => 'Country',
-                    'key'  => '$country',
-                    'required' => false
-                ],
-                [
-                    'name' => 'Zip',
-                    'key'  => '$zip',
-                    'required' => false
-                ],
-    
-            );
-    
-            // include('templates/intregation-form.php');
-            return 0;
-        }
-    
-
-
-
-   
-        // $this->KLCF_admin_after_additional_settings();
-    
 }
 
-// $z = new Klaviyo_Integration_Admin;
-// $z->KLCF_admin_after_additional_settings();
-
-
-
-// foreach($form as $objForm){
-//  $manager = WPCF7_FormTagsManager::get_instance();
-//  $tags  = $manager->scan( $objForm->form );
-//  $filter_result = $manager->filter( $tags, $cond );
-//   foreach ($filter_result as $key => $value) {
-//       echo $value->type;
-//       echo $value->name;
-//   }
-//   }
 

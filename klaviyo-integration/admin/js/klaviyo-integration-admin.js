@@ -4,6 +4,7 @@
     var apiKey;
     var selected_klaviyo_list;
     let local_storage = localStorage.getItem("aki");
+    var php_cf7_fields = [];
 
         setTimeout(()=>{
             check_local_storage();
@@ -55,6 +56,9 @@
                         return 0;
                     }
                     if (response.success == true) {  
+                        //console.log("response.data).html",JSON.parse(response.data).cf7_select_fields);
+                        php_cf7_fields = JSON.parse(response.data).cf7_select_fields;
+
                         $('#akicf7').html(JSON.parse(response.data).html);
                         $('.akicf7_fetch_all_lists').remove();
                         loader(1);
@@ -101,25 +105,15 @@
         function check_local_storage(){
 
             if(local_storage != null ){    
-                    apiKey = localStorage.getItem("aki");
+                    apiKey = local_storage.trim();
                     get_all_forms_list_from_klaviyo(null);
             }else{
-                apiKey = $('#akicf7_apikey').val().trim();
-                if(apiKey == "" ){
-                        localStorage.setItem("aki", apiKey);
-                        get_all_forms_list_from_klaviyo(null);
-                }
+                    apiKey = $('#akicf7_apikey').val().trim();
+                    localStorage.setItem("aki", apiKey);
+                    get_all_forms_list_from_klaviyo(null);            
             }
             
         }
-        // custom -- add button
-        $(document).on("click", ".akicf7_add_block", function() {
-            custom_adding_field_block()
-        });
-        // custom -- delete button
-        $(document).on("click", ".delete", function() {
-            $(this).closest(".akicf7_block").remove();
-        });
         // change api key button
         $(document).on("click", "#cak", function(e) {
             e.preventDefault();
@@ -129,18 +123,26 @@
             $('#akicf7_has_lists, .akicf7_select_list').remove();
             $(".akicf7_enabled span").css("color", "#d10707").text("Disabled");
         });
+        // custom -- delete button
+        $(document).on("click", ".delete", function() {
+            $(this).closest(".akicf7_block").remove();
+        });
+        // custom -- add button
+        $(document).on("click", ".akicf7_add_block", function() {
+            custom_adding_field_block()
+        });
         function custom_adding_field_block() {
             $("#add_on_fields").append(`
                     <div class="form-group akicf7_block">
                     <div class="row">
                     <div class="col-md-9">
                         <div class="col-md-4">
-                        <select class="form-control" required="" name="">
+                        <select class="form-control php_cf7_fields" required="" name="">
                            <option value="0">Select</option>
                         </select>
                         </div>
                         <div class="col-md-8">
-                            <select class="form-control" required="" name="">
+                            <select class="form-control klaviyo_cf7_fields" required="" name="">
                                 <option value="0">Select</option>
                             </select>
                         </div>
@@ -150,7 +152,16 @@
                     </div>
                 </div>
         `)
+        $.each(php_cf7_fields, function(key, value) {
+            var keyy = key+1;
+            $('.php_cf7_fields').append('<option value="' + keyy + '">' + value + '</option>');
+        });
+        $.each(php_cf7_fields, function(key, value) {
+            var keyy = key+1;
+            $('.klaviyo_cf7_fields').append('<option value="' + keyy + '">' + value + '</option>');
+        });
         }
+
 })(jQuery);
 
 

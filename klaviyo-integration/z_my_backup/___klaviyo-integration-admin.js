@@ -352,3 +352,38 @@
 
 
 })(jQuery);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // $.ajax({
+        //     url: '/wp-admin/admin-ajax.php',
+        //     data: {
+        //         action:'get_data', //this value is first parameter of add_action
+        //         variable: "pass_var_to_js" 
+        //     },
+        //     success: function(data) {
+        //       console.log(data);
+        //     }
+        //   });
+
+
+
+
+
+
+
+
+
+
+
