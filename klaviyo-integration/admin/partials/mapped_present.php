@@ -92,12 +92,13 @@ try {
                                     </div>
                                     <div class="col-md-8">
                                         <select class="form-control" required="" name="akicf7[<?php echo $key ?>]">
-                                            <?php foreach ($klaviyo_fields as $key => $value) {
-                                                echo "<option value=" . $key . ">" . $value . "</option>";
+                                            <?php foreach ($klaviyo_fields as $_key => $_value) {
+                                                echo "<option value=" . $_key . ">" . $_value . "</option>";
                                             } ?>
                                         </select>
                                     </div>
                                 </div>
+                                <?php echo in_array($key, $astrik_array) ? "" : "<div class='col-md-3 delete'> <a class='btn_ btn-danger_'><img src='/wp-content/plugins/klaviyo-integration/admin/images/delete.svg'/>Remove</a></div>";  ?>
                             </div>
                         </div>
                     <?php } ?>
