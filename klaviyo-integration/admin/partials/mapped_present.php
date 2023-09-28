@@ -11,7 +11,7 @@ try {
         //     ],
         // ]);
         // $res = json_decode($response->getBody());
-    $klaviyo_fields = ['Name', 'Email', 'Phone', 'Message'];
+    $klaviyo_fields = ['Select','Name', 'Email', 'Phone', 'Message'];
 
     $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/', [
         'headers' => [
@@ -26,8 +26,7 @@ try {
     // contact-form-7 start ****
     $ContactForm = WPCF7_ContactForm::get_instance($post_id);
     $form_fields = $ContactForm->scan_form_tags();
-    $cf7_fields = "<option value='Select'>Select</option>";
-
+    
     $cf7_fields_name = [];
     $blocks = "";
     $astrik_array = [];
