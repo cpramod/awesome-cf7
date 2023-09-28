@@ -1,10 +1,16 @@
+
 (function($) {
     "use strict";
 
-    var apiKey, selected_klaviyo_list, php_cf7_fields, klaviyo_fields, count;
+    var apiKey, selected_klaviyo_list, local_storage, php_cf7_fields, klaviyo_fields, count;
     selected_klaviyo_list;
+    local_storage = localStorage.getItem("aki");
     php_cf7_fields = [];
     klaviyo_fields = [];
+
+        setTimeout(()=>{
+            check_local_storage();
+        },500);
 
        // Enable Klaviyo Integration: checkbox   
        $(document).on("click", "#akicf7_checkbox", function() {
@@ -14,6 +20,9 @@
         // choose a klaviyo-list from fetched lists
         $(document).on("click", ".akicf7_fetch_all_lists", function(e) {
             apiKey = $("#akicf7_apikey").val();
+            if (local_storage == null) {
+                localStorage.setItem("aki", apiKey);
+            }
             if (apiKey == "") {
                 e.preventDefault();
                 alert("Please Enter Your Valid Api Key");
@@ -49,11 +58,11 @@
                         return 0;
                     }
                     if (response.success == true) {  
-                        console.log("response.data).html",JSON.parse(response.data).cf7_select_fields);
+                        //console.log("response.data).html",JSON.parse(response.data).cf7_select_fields);
                         php_cf7_fields = JSON.parse(response.data).cf7_select_fields;
                         klaviyo_fields = JSON.parse(response.data).klaviyo_select_fields;
 
-                        $('#akicf7').html(JSON.parse(response.data).html); 
+                        $('#akicf7').html(JSON.parse(response.data).html);
                         $('.akicf7_fetch_all_lists').remove();
                         loader(1);
                     }
@@ -96,14 +105,26 @@
             }
         }
 
+        function check_local_storage(){
+
+            if(local_storage != null ){    
+                    apiKey = local_storage.trim();
+                    get_all_forms_list_from_klaviyo(null);
+            }else{
+                    apiKey = $('#akicf7_apikey').val().trim();
+                    localStorage.setItem("aki", apiKey);
+                    get_all_forms_list_from_klaviyo(null);            
+            }
+            
+        }
         // change api key button
         $(document).on("click", "#cak", function(e) {
             e.preventDefault();
+            localStorage.removeItem("aki");
             $("#akicf7_apikey").val("").removeAttr('disabled');
-            $(".akicf7_api_box>div").append('<button class="akicf7_fetch_all_lists">Fetch Klaviyo Lists</button> <div class="aki7_loader"></div>');
-            $(".akicf7_api_box>div label").css('display',"block");
+            $(".akicf7_api_box>div").append('<button class="akicf7_fetch_all_lists">Fetch Klaviyo Lists</button>');
             $('#akicf7_has_lists, .akicf7_select_list').remove();
-            $(".akicf7_enabled span , ._map_key_ span").addClass('disabled').text("Disabled");
+            $(".akicf7_enabled span").css("color", "#d10707").text("Disabled");
         });
         // custom -- delete button
         $(document).on("click", ".delete", function() {
@@ -161,8 +182,5 @@
         })
 
 })(jQuery);
-
-
-
 
 

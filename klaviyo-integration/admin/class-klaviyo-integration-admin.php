@@ -22,7 +22,8 @@ use GuzzleHttp\Psr7\Response;
  * @subpackage Klaviyo_Integration/admin
  * @author     Your Name <email@example.com>
  */
-class Klaviyo_Integration_Admin {
+class Klaviyo_Integration_Admin
+{
 
     /**
      * The ID of this plugin.
@@ -52,12 +53,13 @@ class Klaviyo_Integration_Admin {
      * @param      string    $plugin_name       The name of this plugin.
      * @param      string    $version    The version of this plugin.
      */
-    public function __construct( $plugin_name, $version ) {
+    public function __construct($plugin_name, $version)
+    {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         //$this->fields_name = $fields_name;  //$fields_name=['test1','test']
 
-       // include 'partials/api_call.php';
+        // include 'partials/api_call.php';
     }
 
     /**
@@ -65,7 +67,8 @@ class Klaviyo_Integration_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_styles() {
+    public function enqueue_styles()
+    {
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -78,9 +81,8 @@ class Klaviyo_Integration_Admin {
          * class.
          */
 
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/klaviyo-integration-admin.css', array(), $this->version, 'all' );
-        wp_enqueue_style( $this->plugin_name.'337', plugin_dir_url( __FILE__ ) . 'css/bootstrap_3_3_7.css', array(), $this->version, 'all' );
-
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/klaviyo-integration-admin.css', array(), $this->version, 'all');
+        wp_enqueue_style($this->plugin_name . '337', plugin_dir_url(__FILE__) . 'css/bootstrap_3_3_7.css', array(), $this->version, 'all');
     }
 
     /**
@@ -88,7 +90,8 @@ class Klaviyo_Integration_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts() {
+    public function enqueue_scripts()
+    {
 
         /**
          * This function is provided for demonstration purposes only.
@@ -101,12 +104,11 @@ class Klaviyo_Integration_Admin {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        
 
-       // wp_enqueue_script( "jquery", plugin_dir_url( __FILE__ ) . 'js/jquery_3_6_4.js', array( '_jquery' ), $this->version, false );
-        wp_enqueue_script($this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/klaviyo-integration-admin.js', array( 'jquery' ), $this->version, false );
-        wp_enqueue_script($this->plugin_name.'337', plugin_dir_url( __FILE__ ) . 'js/bootstrap_min_3_3_7.js', array( 'jquery' ), $this->version, false );
 
+        // wp_enqueue_script( "jquery", plugin_dir_url( __FILE__ ) . 'js/jquery_3_6_4.js', array( '_jquery' ), $this->version, false );
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/klaviyo-integration-admin.js', array('jquery'), $this->version, false);
+        wp_enqueue_script($this->plugin_name . '337', plugin_dir_url(__FILE__) . 'js/bootstrap_min_3_3_7.js', array('jquery'), $this->version, false);
     }
 
 
@@ -119,7 +121,7 @@ class Klaviyo_Integration_Admin {
     // }
 
 
-    
+
 
     // public function addAdminMenuItems() {
     //  //add_menu_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', string $icon_url = '', int $position = null )
@@ -147,7 +149,7 @@ class Klaviyo_Integration_Admin {
     //      'displayAdminSettings',
     //      )
     //  );
-        
+
     //   }
 
     //   public function displayAdminDashboard() {
@@ -158,16 +160,17 @@ class Klaviyo_Integration_Admin {
     //  require_once 'partials/' . $this->plugin_name . '-admin-settings-display.php';
     //    }
 
-    public function settings_menu() {
- 
+    public function settings_menu()
+    {
+
         // add_options_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '' ) 
-        add_options_page('CF7 Klaviyo Integration', 'CF7 Klaviyo Integration', 'manage_options', 'cf7-integration-setting-url', array($this,'settings_menu_dashboard'));    
+        add_options_page('CF7 Klaviyo Integration', 'CF7 Klaviyo Integration', 'manage_options', 'cf7-integration-setting-url', array($this, 'settings_menu_dashboard'));
         // custom_page_html_form is the function in which I have written the HTML for my cf7 integration form.
     }
-    public function settings_menu_dashboard(){
-         //require_once 'admin/partials/klaviyo-integration-admin-display.php';
+    public function settings_menu_dashboard()
+    {
+        //require_once 'admin/partials/klaviyo-integration-admin-display.php';
         require_once 'partials/klaviyo-integration-admin-dashboard.php';
-
     }
 
 
@@ -182,11 +185,12 @@ class Klaviyo_Integration_Admin {
     * @param array $panels - an array of all the panels currently displayed on the Contact Form 7 edit screen
     */
 
-    public function add_cf7_panel ($panels) {
+    public function add_cf7_panel($panels)
+    {
         $panels['custom-fields'] = array(
             'title' => 'CF7 Klaviyo Integration',
             // 'callback' => 'wpcf7_custom_fields',
-            'callback' => array($this,'wpcf7_custom_fields')
+            'callback' => array($this, 'wpcf7_custom_fields')
         );
 
         return $panels;
@@ -196,168 +200,220 @@ class Klaviyo_Integration_Admin {
     * Sets up the fields inside our new custom panel
     * @param WPCF7_ContactForm $post - modified post type object from Contact Form 7 containing information about the current contact form
     */
-    function wpcf7_custom_fields ($post) {
+    function wpcf7_custom_fields($post)
+    {
         $post_id = $post->ID();
         // $checked = get_option('akicf7_'.$post_id.'_enable_checkbox');
 
-        $apiKey = get_option('akicf7_'.$post_id.'_apikey');
-        ?>
-        <div id="akicf7">
-            <h2 class="_h2"><?php echo esc_html( __( 'Integration Status:', 'contact-form-7' ) ); ?><span>Disabled</span></h2>
-            <fieldset>
+        $apiKey = get_option('akicf7_' . $post_id . '_apikey');
+        $mapped_fields = get_option('akicf7_' . $post_id . '_mapped_fields');
+        $mapped_fields = unserialize($mapped_fields);
+
+        require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
+        $client = new \GuzzleHttp\Client();
+
+        if ($mapped_fields != "" && $apiKey != "") { 
+
+            // this is for fetching data from database 
+            require_once 'partials/mapped_present.php';
+
+        } else { ?>
+
+            <div id="akicf7">
+                <h2 class="_h2"><?php echo esc_html(__('Integration Status:', 'contact-form-7')); ?><span>Disabled</span></h2>
+                <fieldset>
                     <label for="akicf7_label">Enable Klaviyo Integration: </label>
-                    <!-- <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" <?php // echo $checked == 'checked'?'checked':''; ?> value=""/> -->
-                    <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" <?php echo $apiKey ?'checked':''; ?> value=""/>
-                        <div class="akicf7_api_input inital <?php echo $apiKey  ? 'enable' : 'disable'; ?> ">
-                            <div class="akicf7_api_box">
-                                <label>Enter Your Api Key:</label>
-                                <div>
-                                    <input type="text" id="akicf7_apikey" name="akicf7_apikey" value="<?php echo $apiKey ? $apiKey : '' ;?>"> 
-                                    <button class="akicf7_fetch_all_lists">Fetch Klaviyo Lists</button>
-                                </div>
+                    <!-- <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" <?php // echo $checked == 'checked'?'checked':'';  ?> value=""/> -->
+                    <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" <?php echo $apiKey ? 'checked' : ''; ?> value="" />
+                    <div class="akicf7_api_input inital <?php echo $apiKey  ? 'enable' : 'disable'; ?> ">
+                        <div class="akicf7_api_box">
+                            <label>Enter Your Api Key:</label>
+                            <div>
+                                <input type="text" id="akicf7_apikey" name="akicf7_apikey" value="<?php echo $apiKey ? $apiKey : ''; ?>">
+                                <button class="akicf7_fetch_all_lists">Fetch Klaviyo Lists</button>
                             </div>
                         </div>
-                        <input id="post_id" type="hidden" value="<?php echo $post_id ?>" name="post_id">
-            </fieldset>
-            <div class="aki7_loader"></div>
-        </div>
-        <?php
+                    </div>
+                    <input id="post_id" type="hidden" value="<?php echo $post_id ?>" name="post_id">
+                    <input type="hidden" name="akicf7_apikey" value="<?php echo $apiKey ? $apiKey : ''; ?>">
+                </fieldset>
+                <div class="aki7_loader"></div>
+            </div>
+
+        <?php } ?>
+<?php
     }
-        /*
+    /*
         * Hooks into the save_post method and adds our new post meta to the contact form if the POST request contains the custom field we set up earlier
         * @param $post_id - post ID of the current post being saved
         */
 
-        function save_awesome_cf7_klaviyo_custom_fields($post_id, $post, $update) {
-            // echo "<pre>";
-            // print_r($_POST);
-            // echo "</pre>";
-            // exit;
+    function save_awesome_cf7_klaviyo_custom_fields($post_id, $post, $update)
+    {
+        
+    //     echo "<pre>";
+    //    //print_r($_POST['akicf7']);
+    //     print_r($_POST);
+    //     echo "</pre>";
+    //     //echo serialize($_POST['akicf7']);
+    //     exit;
 
-            if($update){
-                update_option('akicf7_'.$post_id.'_enable_checkbox', $_POST['akicf7_checkbox']);
-                update_option('akicf7_'.$post_id.'_apikey', $_POST['akicf7_apikey']);
-            }else{
-                add_option('akicf7_'.$post_id.'_enable_checkbox', $_POST['akicf7_checkbox']);
-                add_option('akicf7_'.$post_id.'_apikey', $_POST['akicf7_apikey']);
-            }
-         
+        if ($update) {
+            update_option('akicf7_' . $post_id . '_enable_checkbox', $_POST['akicf7_checkbox']);
+            update_option('akicf7_' . $post_id . '_apikey', $_POST['akicf7_apikey']);
+
+            update_option('akicf7_' . $post_id . '_mapped_fields', serialize($_POST['akicf7']));
+        } else {
+            add_option('akicf7_' . $post_id . '_enable_checkbox', $_POST['akicf7_checkbox']);
+            add_option('akicf7_' . $post_id . '_apikey', $_POST['akicf7_apikey']);
+
+            add_option('akicf7_' . $post_id . '_mapped_fields', serialize($_POST['akicf7']));
         }
+    }
 
 
 
-        public function my_ajax_handler() {
-            $data = $_POST;
-            require_once(plugin_dir_path( dirname( __FILE__ ) ) .'vendor/autoload.php');
-            $client = new \GuzzleHttp\Client();
+    public function my_ajax_handler()
+    {
+        $data = $_POST;
+        $post_id = $data["post_id"];
+       
+        // echo "<pre>";
+        // print_r($data);
 
-            try {
-                if(array_key_exists("listId",$data)){
-                    $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/'.$data["listId"], [
-                        'headers' => [
-                            'Authorization' => 'Klaviyo-API-Key '.$data["api"],
-                            'accept' => 'application/json',
-                            'revision' => '2023-09-15',
-                        ],
-                        ]);
+        require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
+        $client = new \GuzzleHttp\Client();
 
-                     $res = json_decode($response->getBody());
-                     wp_send_json_success($res);
+        try {
+            if (array_key_exists("listId", $data)) {
+                $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/' . $data["listId"], [
+                    'headers' => [
+                        'Authorization' => 'Klaviyo-API-Key ' . $data["api"],
+                        'accept' => 'application/json',
+                        'revision' => '2023-09-15',
+                    ],
+                ]);
 
-                }else{
-                    $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/', [
-                        'headers' => [
-                            'Authorization' => 'Klaviyo-API-Key '.$data["api"],
-                            'accept' => 'application/json',
-                            'revision' => '2023-09-15',
-                        ],
-                        ]);
-                        $res = json_decode($response->getBody());
-                        $newArray = (array)$res->data;
+                $res = json_decode($response->getBody());
+                wp_send_json_success($res);
+            } else {
+                $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/', [
+                    'headers' => [
+                        'Authorization' => 'Klaviyo-API-Key ' . $data["api"],
+                        'accept' => 'application/json',
+                        'revision' => '2023-09-15',
+                    ],
+                ]);
+                $res = json_decode($response->getBody());
+                $newArray = (array)$res->data;
 
-                       
-                        // klaviyo all lists start ****
-                        $lists = "";
-                        $apiKey= $data["api"];
-                        foreach($newArray as $list){
-                            $lists .= "<option value=". $list->id .">". $list->attributes->name ."</option>";              
-                        }
-                        $checked_unchecked = ($apiKey ? "checked" : "");
-                        $enable_disable = ($apiKey ? "enable" : "disable");
-                        $key = ($apiKey ? $apiKey :"");
 
-                        // contact-form-7 start ****
-                        $ContactForm = WPCF7_ContactForm::get_instance($data["post_id"]);
-                        $form_fields = $ContactForm->scan_form_tags();        
-                        $fields = "<option value='select'>Select</option>";
+                // klaviyo all lists start ****
 
-                        $fields_name = [];
-                        foreach($form_fields as $field){      
-                             $trimmed = ucwords(trim($field->raw_name, "your-")); 
-                             if($trimmed != ""){
-                                array_push($fields_name, $trimmed);
-                                $fields .= "<option value=". $field->basetype .">". $trimmed  ."</option>";  
-                             }                                                    
-                        }    
-                        array_pop($fields_name);
 
-                        $blocks = "";
-                        foreach($form_fields as $field){      
-                            $trimmed = ucwords(trim($field->raw_name, "your-"));     
-                            $check_asterik = $field->type; 
-                            if(strpos($check_asterik, "*") !== false){
-                                $astrik = "*";
-                                $remove_btn = '';
-                            }else{
-                                $astrik = "";
-                                $remove_btn = '<div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/>Remove</a></div>';
-                            }
-                            if($trimmed != ""){
-                                $blocks .= '                          
+                // $personid = "01HAV3SW2RDTJ0T9ZE0V298ZQH";
+                // $profile_response = $client->request('GET', 'https://a.klaviyo.com/api/v1/person/'.$personid.'?api_key='.$data["api"], [
+                //     'headers' => [
+                //       'accept' => 'application/json',
+                //     ],
+                //   ]);
+                // echo "<pre>";
+                // print_r($profile_response);exit;
+
+                $klaviyo_fields = ['Name', 'Email', 'Phone', 'Message'];
+
+                $lists = "";
+                $apiKey = $data["api"];
+                foreach ($newArray as $list) {
+                    $lists .= "<option value=" . $list->id . ">" . $list->attributes->name . "</option>";
+                }
+                $checked_unchecked = ($apiKey ? "checked" : "");
+                $enable_disable = ($apiKey ? "enable" : "disable");
+                $key = ($apiKey ? $apiKey : "");
+
+                // contact-form-7 start ****
+                $ContactForm = WPCF7_ContactForm::get_instance($data["post_id"]);
+                $form_fields = $ContactForm->scan_form_tags();
+                $cf7_fields = "<option value='Select'>Select</option>";
+
+                $cf7_fields_name = [];
+
+                foreach ($klaviyo_fields as $field) {
+                    $cf7_fields .= "<option value='" . $field . "'>" . $field  . "</option>";
+                }
+                // foreach($form_fields as $field){      
+                //      $trimmed = ucwords(trim($field->raw_name, "your-")); 
+                //      if($trimmed != ""){
+                //         array_push($cf7_fields_name, $trimmed);
+                //         $cf7_fields .= "<option value=". $field->basetype .">". $trimmed  ."</option>";  
+                //      }                                                    
+                // }    
+
+                $blocks = "";
+                foreach ($form_fields as $field) {
+
+                    $trimmed = ucwords(trim($field->raw_name, "your-"));
+                    if ($trimmed != "") {
+                        array_push($cf7_fields_name, $trimmed);
+                    }
+                    $check_asterik = $field->type;
+                    if (strpos($check_asterik, "*") !== false) {
+                        $astrik = "*";
+                        $remove_btn = '';
+                    } else {
+                        $astrik = "";
+                        $remove_btn = '<div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/>Remove</a></div>';
+                    }
+                    if ($trimmed != "") {
+                        $blocks .= '                          
                                             <div class="form-group akicf7_block">
                                             <div class="row">
                                                 <div class="col-md-9">
                                                     <div class="col-md-4">
-                                                        <label>'.$trimmed.'<span> '.$astrik.'</span></label>
+                                                        <label>' . $trimmed . '<span> ' . $astrik . '</span></label>
                                                     </div>
                                                     <div class="col-md-8">
-                                                        <select class="form-control" required="" name="">
-                                                            '.$fields.'
+                                                        <select class="form-control" required="" name="akicf7['. $trimmed .']">
+                                                            ' . $cf7_fields . '
                                                         </select>
                                                     </div>
                                                 </div>
-                                                '.$remove_btn.'
+                                                ' . $remove_btn . '
                                             </div>
                                         </div>                                   
                                 ';
-                            }
-                       }    
-                      //  --------------------------
-                        
-                        $cf7_extra_fields = array("Phone","City","zip","Go Pro ..");
-                        $merged_cf7_fields = array_merge($fields_name, $cf7_extra_fields);
+                               // <select class="form-control" required="" name="akicf7[option_' . $trimmed . ']">
+                    }
+                }
+                //  array_pop($cf7_fields_name);
+                //  --------------------------
 
-                        $html = array(
-                            'html' => '
+                $cf7_extra_fields = array("Phone", "City", "zip", "Go Pro ..");
+                $merged_cf7_fields = array_merge($cf7_fields_name, $cf7_extra_fields);
+
+                $html = array(
+                    'html' => '
                                     <div id="akicf7_app">
                                         <h2 class="akicf7_enabled">Integration Status:<span>Enabled</span></h2>
                                         <fieldset>
                                                 <label for="akicf7_label">Enable Klaviyo Integration: </label>
-                                                <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" '. $checked_unchecked .' value=""/>
-                                                    <div class="akicf7_api_input '.$enable_disable .' ">
+                                                <input type="checkbox" id="akicf7_checkbox" name="akicf7_checkbox" ' . $checked_unchecked . ' value=""/>
+                                                    <div class="akicf7_api_input ' . $enable_disable . ' ">
                                                         <div class="akicf7_api_box">
                                                            <div>
                                                                     <label>Enter Your Api Key:</label>
-                                                                    <input type="text" id="akicf7_apikey" name="akicf7_apikey" value="'. $key .'" disabled="akicf7_apikey">
+                                                                    <input type="text" id="akicf7_apikey" value="' . $key . '" disabled="akicf7_apikey">
+                                                                    <input type="hidden" id="akicf7_apikey_" name="akicf7_apikey" value="' . $key . '" >
                                                            </div> 
                                                             <div class="akicf7_select_list">
                                                                 <label>Select Klaviyo List</label>
                                                                 <select class="form-control_ akicf7_lists" required="">
-                                                                '. $lists .'
+                                                                ' . $lists . '
                                                                 </select>
                                                             </div>   
                                                         </div>
                                                     </div>
+                                                <input id="post_id" type="hidden" value="'.$post_id.'" name="post_id">
                                         </fieldset>         
                                         
                                         <div id="akicf7_has_lists">
@@ -367,7 +423,7 @@ class Klaviyo_Integration_Admin {
                                                     <div class="col-md-9"> 
                                                     <h2>Map Fields:</h2>
 
-                                                    '.$blocks.'
+                                                    ' . $blocks . '
 
                                                     <div id="add_on_fields">
                                                     </div>
@@ -386,30 +442,21 @@ class Klaviyo_Integration_Admin {
                                                     <button id="cak">Change Api Key</button>
                                                 </div>
                                                 </div>
-                                                </fieldset> 
-                                        
-                                           <div class="aki7_loader"></div>
+                                                </fieldset>   
                                     </div>
-
+                                 <div class="aki7_loader"></div>
                             ',
-                            'cf7_select_fields'=> $merged_cf7_fields,
-                            'klaviyo_select_fields'=> "in progress",
-                        );
-                        // echo "<pre>";
-                        // print_r($html);exit;
-                      wp_send_json_success(json_encode($html));
-                      
-                }
-              } catch(Exception $e) {
-                $errr = [];
-                $errr['error'] = true;     
-                wp_send_json_error($errr);               
-              }
-
-              
+                    'cf7_select_fields' => $merged_cf7_fields,
+                    'klaviyo_select_fields' => $klaviyo_fields,
+                );
+                // echo "<pre>";
+                // print_r($html);exit;
+                wp_send_json_success(json_encode($html));
+            }
+        } catch (Exception $e) {
+            $errr = [];
+            $errr['error'] = true;
+            wp_send_json_error($errr);
         }
-
-
+    }
 }
-
-
