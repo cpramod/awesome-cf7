@@ -1,5 +1,12 @@
 <?php
 
+
+        // echo strstr($key, "-"); 
+        //<label><?php  if(strpos($key, "-")) { echo substr($key, strpos($key, '-') + 1); } else{ echo $key; } ?><span><?php echo in_array($key, $astrik_array) ? " *" : "" ; ?> </span></label>
+
+
+
+
         // public function KLCF_admin_after_additional_settings() {
 
         //     $post_id = sanitize_text_field($_GET['post']);

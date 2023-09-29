@@ -121,12 +121,12 @@
                     <div class="row">
                     <div class="col-md-9">
                         <div class="col-md-4">
-                        <select class="form-control php_cf7_fields${count}" required="" name="${count}">
+                        <select class="form-control php_cf7_fields p${count}" required="" name="${count}">
                            <option value="Select">Select</option>
                         </select>
                         </div>
                         <div class="col-md-8">
-                            <select class="form-control klaviyo_cf7_fields${count}" required="" name="${count}">
+                            <select class="form-control klaviyo_cf7_fields k${count}" required="" name="${count}">
                                 <option value="Select">Select</option>
                             </select>
                         </div>
@@ -145,20 +145,33 @@
         count++;
         }
 
-        // assigning custom name to custom added fields
+        // // assigning custom name to custom added fields
+            // var counter= 1;
+            // $(document).on('change','#add_on_fields select',function(){
+            //     var val,attr;
+            //     val =$(this).val();
+            //     //attr = $(this).attr('name');
+            //    if(this.className.includes("klaviyo")){
+            //       // $(this).attr("name",'akicf7[custom_klaviyo_'+counter+"_"+attr+"_"+val+']');
+            //       $(this).attr("name",'akicf7['+"custom_klaviyo-"+val+" "+counter+']');
+            //         //  $(this).attr("name",'akicf7['+val+']');
+            //          counter++;
+            //    }else{
+            //      //  $(this).attr("name",'akicf7[custom_cf7_'+counter+"_"+attr+"_"+val+']');
+            //       $(this).attr("name",'akicf7['+"custom_cf7-"+val+" "+counter+']');
+            //         //  $(this).attr("name",'akicf7['+val+']');
+            //    }        
+            // })
+        var val; // takes value from another slect parallel to it , FOR MAPPING PURPOSE 
         $(document).on('change','#add_on_fields select',function(){
-            var val,attr;
-            val =$(this).val();
-            attr = $(this).attr('name');
-
            if(this.className.includes("klaviyo")){
-            //   $(this).attr("name",'akicf7[custom_klaviyo_'+val+"_"+attr+']');
-                 $(this).attr("name",'akicf7['+val+']');
+              $(this).attr("name",'akicf7['+val+']');
            }else{
-            //   $(this).attr("name",'akicf7[custom_cf7_'+val+"_"+attr+']');
-                 $(this).attr("name",'akicf7['+val+']');
+              val =$(this).val();
+              $(this).attr("name",val);
            }        
         })
+
 
 })(jQuery);
 

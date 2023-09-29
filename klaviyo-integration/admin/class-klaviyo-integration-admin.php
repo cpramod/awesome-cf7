@@ -209,6 +209,10 @@ class Klaviyo_Integration_Admin
         $mapped_fields = get_option('akicf7_' . $post_id . '_mapped_fields');
         $mapped_fields = unserialize($mapped_fields);
 
+                // echo "<pre>";
+                // print_r($mapped_fields);
+                // exit;
+
         require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
         $client = new \GuzzleHttp\Client();
 

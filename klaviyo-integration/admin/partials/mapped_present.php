@@ -11,7 +11,7 @@ try {
         //     ],
         // ]);
         // $res = json_decode($response->getBody());
-    $klaviyo_fields = ['Select','Name', 'Email', 'Phone', 'Message'];
+    $klaviyo_fields = ['Select'=>'Select','Name'=>'Name', 'Email'=>'Email', 'Phone'=>'Phone', 'Message'=>'Message'];
 
     $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/', [
         'headers' => [
@@ -82,17 +82,27 @@ try {
                     <h2>Map Fields:</h2>
 
 
-                    <?php foreach ($mapped_fields  as $key => $value) {  ?>
+                    <?php foreach ($mapped_fields  as $key => $value) { 
+                        // var_dump($key);
+                        // var_dump($value);
+                        ?>
                         <div class="form-group akicf7_block">
                             <div class="row">
                                 <div class="col-md-9">
                                     <div class="col-md-4">
-                                        <label><?php echo $key ?><span><?php echo in_array($key, $astrik_array) ? " *" : "" ; ?> </span></label>
+                                        <label><?php  if(strpos($key, "-")) { echo substr($key, strpos($key, '-') + 1); } else{ echo $key; } ?><span><?php echo in_array($key, $astrik_array) ? " *" : "" ; ?> </span></label>
                                     </div>
                                     <div class="col-md-8">
                                         <select class="form-control" required="" name="akicf7[<?php echo $key ?>]">
-                                            <?php foreach ($klaviyo_fields as $_key => $_value) {
-                                                echo "<option value=" . $_key . ">" . $_value . "</option>";
+                                            <?php foreach ($klaviyo_fields as $key1 => $value1) {
+                                                // var_dump($value1);
+                                                // var_dump($key1);
+                                                // var_dump($value);
+                                                if($value1 == $value ){
+                                                    echo "<option selected value=" . $value . ">". $value ."</option>";
+                                                }else{
+                                                    echo "<option value=" . $value1 . ">". $value1 ."</option>";
+                                                }                                              
                                             } ?>
                                         </select>
                                     </div>
@@ -101,6 +111,7 @@ try {
                             </div>
                         </div>
                     <?php } ?>
+
 
 
                     <div id="add_on_fields">
