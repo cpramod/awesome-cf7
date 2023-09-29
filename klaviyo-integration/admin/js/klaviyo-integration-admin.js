@@ -137,10 +137,12 @@
                 </div>
         `)
         $.each(php_cf7_fields, function(key, value) {
-            $('.php_cf7_fields'+count ).append('<option value="' + value +'">' + value + '</option>');
+            // $('.php_cf7_fields'+count ).append('<option value="' + value +'">' + value + '</option>');
+            $('.php_cf7_fields' ).append('<option value="' + value +'">' + value + '</option>');
         });
         $.each(klaviyo_fields, function(key, value) {
-            $('.klaviyo_cf7_fields'+count).append('<option value="' + value +'">' + value + '</option>');
+            // $('.klaviyo_cf7_fields'+count).append('<option value="' + value +'">' + value + '</option>');
+            $('.klaviyo_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
         });
         count++;
         }
@@ -162,10 +164,17 @@
             //         //  $(this).attr("name",'akicf7['+val+']');
             //    }        
             // })
-        var val; // takes value from another slect parallel to it , FOR MAPPING PURPOSE 
+        var val; // takes value from another select parallel to it , FOR MAPPING PURPOSE 
         $(document).on('change','#add_on_fields select',function(){
            if(this.className.includes("klaviyo")){
-              $(this).attr("name",'akicf7['+val+']');
+              var check_select_parallet_to_it = $(this).parent().siblings().find('.php_cf7_fields').val();
+              // console.log("check_select_parallet_to_it",check_select_parallet_to_it);
+              if(check_select_parallet_to_it != "Select"){
+                $(this).attr("name",'akicf7['+val+']');
+              }else{
+                alert("banauna baki xa,, enter parallel select value")
+              }
+              
            }else{
               val =$(this).val();
               $(this).attr("name",val);

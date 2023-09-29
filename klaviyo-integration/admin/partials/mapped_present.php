@@ -155,12 +155,12 @@ try {
                             <div class="row">
                             <div class="col-md-9">
                                 <div class="col-md-4">
-                                <select class="form-control php_cf7_fields${count}" required="" name="${count}">
+                                <select class="form-control php_cf7_fields p${count}" required="" name="${count}">
                                 <option value="Select">Select</option>
                                 </select>
                                 </div>
                                 <div class="col-md-8">
-                                    <select class="form-control klaviyo_cf7_fields${count}" required="" name="${count}">
+                                    <select class="form-control klaviyo_cf7_fields k${count}" required="" name="${count}">
                                         <option value="Select">Select</option>
                                     </select>
                                 </div>
@@ -171,10 +171,12 @@ try {
                         </div>
                     `)
                         $.each(php_cf7_fields, function(key, value) {
-                            $('.php_cf7_fields'+count ).append('<option value="' + value +'">' + value + '</option>');
+                            // $('.php_cf7_fields'+count ).append('<option value="' + value +'">' + value + '</option>');
+                            $('.php_cf7_fields' ).append('<option value="' + value +'">' + value + '</option>');
                         });
                         $.each(klaviyo_fields, function(key, value) {
-                            $('.klaviyo_cf7_fields'+count).append('<option value="' + value +'">' + value + '</option>');
+                            // $('.klaviyo_cf7_fields'+count).append('<option value="' + value +'">' + value + '</option>');
+                            $('.klaviyo_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
                         });
                         count++;
                 }
