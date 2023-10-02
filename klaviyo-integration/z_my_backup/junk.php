@@ -1,4 +1,35 @@
 <?php
+// 01HAP7ZK9DXYX9FVNV1RGTFM09   // pk_3979bc797b39b9c4b7641ec070c9c5018a     full access 
+
+
+
+$post_response = $client->request('POST', 'https://a.klaviyo.com/api/profiles/', [
+    'body' => ' {"data":{
+        "type":"profile",
+        "attributes":{
+            "email":"sarah.mason@klaviyo-demo.com",
+            "phone_number":"+15005550006",
+            "first_name":"Sarah",
+            "last_name":"Mason",
+            "organization":"Klaviyo",
+            "title":"Engineer",
+            "image":"https://images.pexels.com/photos/3760854/pexels-photo-3760854.jpeg",
+            "location":{"address1":"89 E 42nd St",
+                "address2":"1st floor",
+                "city":"New York",
+                "country":"United States",
+                "region":"NY",
+                "timezone":"America/New_York"},
+                "properties":{"newKey":"New Value"}}}}
+    ',
+    'headers' => [
+        'Authorization' => 'Klaviyo-API-Key '. $apiKey,
+        'accept' => 'application/json',
+        'content-type' => 'application/json',
+        'revision' => '2023-09-15',
+      ],
+  ]);
+ 
 
 
         // echo strstr($key, "-"); 

@@ -43,6 +43,8 @@ class Klaviyo_Integration_Admin
      */
     private $version;
 
+    public $api_key;
+
     // private $fields_name;
 
 
@@ -57,9 +59,12 @@ class Klaviyo_Integration_Admin
     {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
-        //$this->fields_name = $fields_name;  //$fields_name=['test1','test']
 
         // include 'partials/api_call.php';
+    }
+
+    public function setApikey($apiKey) { 
+        $this->api_key = $apiKey; 
     }
 
     /**
@@ -196,6 +201,25 @@ class Klaviyo_Integration_Admin
         return $panels;
     }
 
+    function fetch_lists_fields_from_klaviyo(){
+        require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
+        $client = new \GuzzleHttp\Client();
+
+        $klv_response = $client->request('GET', 'https://a.klaviyo.com/api/profiles/01HAP7ZK9DXYX9FVNV1RGTFM09/', [   // pk_3979bc797b39b9c4b7641ec070c9c5018a
+            'headers' => [
+              'Authorization' => 'Klaviyo-API-Key ' . $this->api_key,
+              'accept' => 'application/json',
+              'revision' => '2023-09-15',
+            ],
+          ]);
+          $klv_res = json_decode($klv_response->getBody());
+          $klaviyo_fields = (array)$klv_res->data;
+          $klaviyo_fields = array_keys((array)$klaviyo_fields['attributes']);
+          $klaviyo_fields = array_combine($klaviyo_fields,$klaviyo_fields);
+
+        return $klaviyo_fields;
+    }
+    
     /*
     * Sets up the fields inside our new custom panel
     * @param WPCF7_ContactForm $post - modified post type object from Contact Form 7 containing information about the current contact form
@@ -245,22 +269,21 @@ class Klaviyo_Integration_Admin
             </div>
 
         <?php } ?>
-<?php
+        <?php
     }
-    /*
+       /*
         * Hooks into the save_post method and adds our new post meta to the contact form if the POST request contains the custom field we set up earlier
         * @param $post_id - post ID of the current post being saved
         */
-
-    function save_awesome_cf7_klaviyo_custom_fields($post_id, $post, $update)
+ 
+    function save_to_akicf7_fields_to_database($post_id, $post, $update) // save_awesome_cf7_klaviyo_custom_fields
     {
-        
-    //     echo "<pre>";
-    //    //print_r($_POST['akicf7']);
-    //     print_r($_POST);
-    //     echo "</pre>";
-    //     //echo serialize($_POST['akicf7']);
-    //     exit;
+        //     echo "<pre>";
+        //    //print_r($_POST['akicf7']);
+        //     print_r($_POST);
+        //     echo "</pre>";
+        //     //echo serialize($_POST['akicf7']);
+        //     exit;
 
         if ($update) {
             update_option('akicf7_' . $post_id . '_enable_checkbox', $_POST['akicf7_checkbox']);
@@ -277,14 +300,12 @@ class Klaviyo_Integration_Admin
 
 
 
-    public function my_ajax_handler()
-    {
+    public function my_ajax_handler()  {
         $data = $_POST;
-        $post_id = $data["post_id"];
+        $apiKey = $data["api"];
+        // $post_id = $data["post_id"];
+        $this->setApikey($apiKey);
        
-        // echo "<pre>";
-        // print_r($data);
-
         require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
         $client = new \GuzzleHttp\Client();
 
@@ -292,7 +313,7 @@ class Klaviyo_Integration_Admin
             if (array_key_exists("listId", $data)) {
                 $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/' . $data["listId"], [
                     'headers' => [
-                        'Authorization' => 'Klaviyo-API-Key ' . $data["api"],
+                        'Authorization' => 'Klaviyo-API-Key ' . $apiKey,
                         'accept' => 'application/json',
                         'revision' => '2023-09-15',
                     ],
@@ -303,7 +324,7 @@ class Klaviyo_Integration_Admin
             } else {
                 $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/', [
                     'headers' => [
-                        'Authorization' => 'Klaviyo-API-Key ' . $data["api"],
+                        'Authorization' => 'Klaviyo-API-Key ' . $apiKey,
                         'accept' => 'application/json',
                         'revision' => '2023-09-15',
                     ],
@@ -313,7 +334,7 @@ class Klaviyo_Integration_Admin
 
 
                 // klaviyo all lists start ****
-
+                $klaviyo_fields = $this->fetch_lists_fields_from_klaviyo();
 
                 // $personid = "01HAV3SW2RDTJ0T9ZE0V298ZQH";
                 // $profile_response = $client->request('GET', 'https://a.klaviyo.com/api/v1/person/'.$personid.'?api_key='.$data["api"], [
@@ -321,13 +342,11 @@ class Klaviyo_Integration_Admin
                 //       'accept' => 'application/json',
                 //     ],
                 //   ]);
-                // echo "<pre>";
-                // print_r($profile_response);exit;
 
-                $klaviyo_fields = ['Name', 'Email', 'Phone', 'Message'];
+                // remove this  $klaviyo_fields
+                //$klaviyo_fields = ['Select'=>'Select','Name'=>'Name', 'Email'=>'Email', 'Phone'=>'Phone', 'Message'=>'Message'];  // remove this array
 
                 $lists = "";
-                $apiKey = $data["api"];
                 foreach ($newArray as $list) {
                     $lists .= "<option value=" . $list->id . ">" . $list->attributes->name . "</option>";
                 }
@@ -460,7 +479,84 @@ class Klaviyo_Integration_Admin
         } catch (Exception $e) {
             $errr = [];
             $errr['error'] = true;
+            array_push($errr, $e->getMessage());
             wp_send_json_error($errr);
         }
+    }
+
+
+
+    // function wpcf7_save_contact_form( $args = '', $context = 'save' ) { }
+    function form_submit_from_frontend(){
+                              
+        $posted_inputs = $_POST;
+        $val = [];
+        $keyy = [];
+
+        foreach ($posted_inputs as $key => $input) {
+
+            $post_id = array_key_exists("_wpcf7",$posted_inputs);
+            if($post_id == true){
+                $post_id = $input;
+            }
+
+            $trimmed = ucwords(trim($key, "your-"));
+            if (strpos($key, "wpcf") == false) {
+                array_push($keyy, $trimmed);
+                array_push($val, $input);
+            }         
+
+        }
+        $input_fields = array_combine($keyy,$val);
+
+
+        
+        $apiKey = get_option('akicf7_' . $post_id . '_apikey');
+        $mapped_fields = get_option('akicf7_' . $post_id . '_mapped_fields');
+        $mapped_fields = unserialize($mapped_fields);
+
+
+        var_dump($apiKey);
+
+        echo "<pre>";
+        print_r($input_fields);
+
+        echo "<pre>";
+        print_r($mapped_fields); exit;
+
+
+        require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
+        $client = new \GuzzleHttp\Client();
+        $post_response = $client->request('POST', 'https://a.klaviyo.com/api/profiles/', [
+            'body' => ' {"data":{
+                "type":"profile",
+                "attributes":{
+                    "email":"sarah.mason@klaviyo-demo.com",
+                    "phone_number":"+15005550006",
+                    "first_name":"Sarah",
+                    "last_name":"Mason",
+                    "organization":"Klaviyo",
+                    "title":"Engineer",
+                    "image":"https://images.pexels.com/photos/3760854/pexels-photo-3760854.jpeg",
+                    "location":{"address1":"89 E 42nd St",
+                        "address2":"1st floor",
+                        "city":"New York",
+                        "country":"United States",
+                        "region":"NY",
+                        "timezone":"America/New_York"},
+                        "properties":{"newKey":"New Value"}}}}
+            ',
+            'headers' => [
+                'Authorization' => 'Klaviyo-API-Key '. $apiKey,
+                'accept' => 'application/json',
+                'content-type' => 'application/json',
+                'revision' => '2023-09-15',
+            ],
+        ]);
+ 
+
+        // echo "<pre>";
+        // print_r($post_response);
+        // exit;
     }
 }

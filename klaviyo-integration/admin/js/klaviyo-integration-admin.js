@@ -25,6 +25,7 @@
 
         function get_all_forms_list_from_klaviyo(e) {
             let post_id = $('#post_id').val();
+
             if (!e == "") {
                 e.preventDefault();
             }
@@ -42,14 +43,15 @@
                 success: function(response){                  
                     //console.log(JSON.parse(response.data).html);   
                     if(response.success == false){
-                        localStorage.removeItem("aki");
+                        console.log(response);
                         alert("Error! please enter valid Api key.");
-                        $('#apiKey').focus().val("");
+                        // $('#akicf7_apikey').focus().val("");
+                        $('#akicf7_apikey').focus().css("border","2px solid #d10707");
                         loader(1);
                         return 0;
                     }
                     if (response.success == true) {  
-                        console.log("response.data).html",JSON.parse(response.data).cf7_select_fields);
+                        //console.log("response.data).html",JSON.parse(response.data).cf7_select_fields);
                         php_cf7_fields = JSON.parse(response.data).cf7_select_fields;
                         klaviyo_fields = JSON.parse(response.data).klaviyo_select_fields;
 
@@ -166,15 +168,15 @@
             // })
         var val; // takes value from another select parallel to it , FOR MAPPING PURPOSE 
         $(document).on('change','#add_on_fields select',function(){
+            $(this).css("border"," 1px solid #cdc8c882");
            if(this.className.includes("klaviyo")){
               var check_select_parallet_to_it = $(this).parent().siblings().find('.php_cf7_fields').val();
-              // console.log("check_select_parallet_to_it",check_select_parallet_to_it);
               if(check_select_parallet_to_it != "Select"){
                 $(this).attr("name",'akicf7['+val+']');
               }else{
-                alert("banauna baki xa,, enter parallel select value")
+                $(this).parent().siblings().find('.php_cf7_fields').css("border","2px solid #d10707");
+                alert("Please, enter parallel select value");
               }
-              
            }else{
               val =$(this).val();
               $(this).attr("name",val);

@@ -2,6 +2,8 @@
 
 try {
     // klaviyo all lists start ****
+     $this->setApikey($apiKey);
+     $klaviyo_fields = $this->fetch_lists_fields_from_klaviyo();
 
         // $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/' . $data["listId"], [
         //     'headers' => [
@@ -11,8 +13,10 @@ try {
         //     ],
         // ]);
         // $res = json_decode($response->getBody());
-    $klaviyo_fields = ['Select'=>'Select','Name'=>'Name', 'Email'=>'Email', 'Phone'=>'Phone', 'Message'=>'Message'];
 
+    // remove this  $klaviyo_fields
+    //$klaviyo_fields = ['Select'=>'Select','Name'=>'Name', 'Email'=>'Email', 'Phone'=>'Phone', 'Message'=>'Message'];  // remove this array
+     
     $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/', [
         'headers' => [
             'Authorization' => 'Klaviyo-API-Key ' . $apiKey,
@@ -172,7 +176,7 @@ try {
                     `)
                         $.each(php_cf7_fields, function(key, value) {
                             // $('.php_cf7_fields'+count ).append('<option value="' + value +'">' + value + '</option>');
-                            $('.php_cf7_fields' ).append('<option value="' + value +'">' + value + '</option>');
+                            $('.php_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
                         });
                         $.each(klaviyo_fields, function(key, value) {
                             // $('.klaviyo_cf7_fields'+count).append('<option value="' + value +'">' + value + '</option>');
