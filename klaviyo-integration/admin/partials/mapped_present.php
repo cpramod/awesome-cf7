@@ -35,15 +35,27 @@ try {
     $blocks = "";
     $astrik_array = [];
     foreach ($form_fields as $field) {
-        $trimmed = ucwords(trim($field->raw_name, "your-"));
-        if ($trimmed != "") {
-            array_push($cf7_fields_name, $trimmed);
+        // $trimmed = ucwords(trim($field->raw_name, "your-"));
+        $trimmed = trim($field->raw_name, "your-");
+        $trimmed = str_replace("-","_",$trimmed);
+
+        if ($trimmed != "") {      
+                array_push($cf7_fields_name, $trimmed);
         }
-        $check_asterik = $field->type;
-        if (strpos($check_asterik, "*") !== false) {
-            array_push($astrik_array, $trimmed);
+        $check_asterik = $field->type;   
+        if (strpos($check_asterik, "*")) {
+            array_push($astrik_array, $trimmed );
+            $astrik_array = array_combine($astrik_array,$astrik_array);
         }         
     }
+
+    // echo "<pre>";
+    // print_r($astrik_array);
+
+    // echo "<pre>";
+    // print_r($form_fields);
+    // print_r($cf7_fields_name);
+    // exit;
 
     $cf7_extra_fields = array("Phone", "City", "zip", "Go Pro ..");
     $merged_cf7_fields = array_merge($cf7_fields_name, $cf7_extra_fields);
@@ -94,14 +106,14 @@ try {
                             <div class="row">
                                 <div class="col-md-9">
                                     <div class="col-md-4">
-                                        <label><?php  if(strpos($key, "-")) { echo substr($key, strpos($key, '-') + 1); } else{ echo $key; } ?><span><?php echo in_array($key, $astrik_array) ? " *" : "" ; ?> </span></label>
+                                        <label><?php  if(strpos($key, "-")) { echo substr($key, strpos($key, '-') + 1); } else{ echo ucwords(str_replace("_"," ",$key)); } ?><span><?php echo in_array($key, $astrik_array) ? " *" : "" ; ?> </span></label>
                                     </div>
                                     <div class="col-md-8">
                                         <select class="form-control" required="" name="akicf7[<?php echo $key ?>]">
                                             <?php foreach ($klaviyo_fields as $key1 => $value1) {
-                                                // var_dump($value1);
-                                                // var_dump($key1);
-                                                // var_dump($value);
+                                                var_dump($value1);
+                                                var_dump($key1);
+                                                var_dump($value);
                                                 if($value1 == $value ){
                                                     echo "<option selected value=" . $value . ">". $value ."</option>";
                                                 }else{
@@ -174,10 +186,14 @@ try {
                             </div>
                         </div>
                     `)
-                        $.each(php_cf7_fields, function(key, value) {
+                       $.each(klaviyo_fields, function(key, value) {
                             // $('.php_cf7_fields'+count ).append('<option value="' + value +'">' + value + '</option>');
                             $('.php_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
                         });
+                        // $.each(php_cf7_fields, function(key, value) {
+                        //     // $('.php_cf7_fields'+count ).append('<option value="' + value +'">' + value + '</option>');
+                        //     $('.php_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
+                        // });
                         $.each(klaviyo_fields, function(key, value) {
                             // $('.klaviyo_cf7_fields'+count).append('<option value="' + value +'">' + value + '</option>');
                             $('.klaviyo_cf7_fields').append('<option value="' + value +'">' + value + '</option>');

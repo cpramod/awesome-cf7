@@ -202,6 +202,13 @@ class Klaviyo_Integration_Admin
     }
 
     function fetch_lists_fields_from_klaviyo(){
+
+
+        // if(){
+        //     $json_data_obj = "create_dummy_user";
+        //     $post_response = $this->create_profile($this->api_key, $json_data_obj);
+        // }
+
         require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
         $client = new \GuzzleHttp\Client();
 
@@ -375,12 +382,15 @@ class Klaviyo_Integration_Admin
                 $blocks = "";
                 foreach ($form_fields as $field) {
 
-                    $trimmed = ucwords(trim($field->raw_name, "your-"));
+                    // $trimmed = ucwords(trim($field->raw_name, "your-"));
+                    $trimmed = trim($field->raw_name, "your-");
+                    $trimmed = str_replace("-","_",$trimmed);
+
                     if ($trimmed != "") {
                         array_push($cf7_fields_name, $trimmed);
                     }
                     $check_asterik = $field->type;
-                    if (strpos($check_asterik, "*") !== false) {
+                    if (strpos($check_asterik, "*")) {
                         $astrik = "*";
                         $remove_btn = '';
                     } else {
@@ -393,7 +403,7 @@ class Klaviyo_Integration_Admin
                                             <div class="row">
                                                 <div class="col-md-9">
                                                     <div class="col-md-4">
-                                                        <label>' . $trimmed . '<span> ' . $astrik . '</span></label>
+                                                        <label>' . ucwords(str_replace("_"," ",$trimmed)) . '<span> ' . $astrik . '</span></label>
                                                     </div>
                                                     <div class="col-md-8">
                                                         <select class="form-control" required="" name="akicf7['. $trimmed .']">
@@ -489,62 +499,63 @@ class Klaviyo_Integration_Admin
     // function wpcf7_save_contact_form( $args = '', $context = 'save' ) { }
     function form_submit_from_frontend(){
                               
-        $posted_inputs = $_POST;
-        $val = [];
-        $keyy = [];
+        try{
 
-        foreach ($posted_inputs as $key => $input) {
-
+            $val = [];
+            $keyy = [];
+            $posted_inputs = $_POST;
             $post_id = array_key_exists("_wpcf7",$posted_inputs);
-            if($post_id == true){
-                $post_id = $input;
+            $post_id && $post_id = $posted_inputs['_wpcf7'];
+
+            foreach ($posted_inputs as $key => $input) {
+                $trimmed = trim($key, "your-");
+                $trimmed = str_replace("-","_",$trimmed);
+                if (!strpos($key, "wpcf")) {
+                    array_push($keyy, $trimmed);
+                    array_push($val, $input);
+                }         
             }
+            $input_fields = array_combine($keyy,$val);
+    
+            $apiKey = get_option('akicf7_' . $post_id . '_apikey');
+            $mapped_fields = get_option('akicf7_' . $post_id . '_mapped_fields');
+            $mapped_fields = unserialize($mapped_fields);
+    
+            $common_array_keys = array_intersect_key($input_fields,$mapped_fields);
+            $json_data_obj = json_encode($common_array_keys);
 
-            $trimmed = ucwords(trim($key, "your-"));
-            if (strpos($key, "wpcf") == false) {
-                array_push($keyy, $trimmed);
-                array_push($val, $input);
-            }         
+            // echo "<pre>";
+            // print_r($input_fields);
+            // print_r($mapped_fields);
+            // print_r($json_data_obj);
+            // exit;
 
+            $post_response = $this->create_profile($apiKey, $json_data_obj);
+
+            echo "<pre>";
+            print_r($post_response);
+            // exit;
+
+        }catch (Exception $e) {
+            echo $e;
         }
-        $input_fields = array_combine($keyy,$val);
+    }
 
+    function create_profile($apiKey , $json_data_obj){
 
+        if($json_data_obj == "create_dummy_user") $json_data_obj = '{"first_name":"dummy","last_name":"dummy","email":"dummy@dummy.com"}';
+  
         
-        $apiKey = get_option('akicf7_' . $post_id . '_apikey');
-        $mapped_fields = get_option('akicf7_' . $post_id . '_mapped_fields');
-        $mapped_fields = unserialize($mapped_fields);
-
-
-        var_dump($apiKey);
-
-        echo "<pre>";
-        print_r($input_fields);
-
-        echo "<pre>";
-        print_r($mapped_fields); exit;
-
-
         require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
         $client = new \GuzzleHttp\Client();
         $post_response = $client->request('POST', 'https://a.klaviyo.com/api/profiles/', [
-            'body' => ' {"data":{
-                "type":"profile",
-                "attributes":{
-                    "email":"sarah.mason@klaviyo-demo.com",
-                    "phone_number":"+15005550006",
-                    "first_name":"Sarah",
-                    "last_name":"Mason",
-                    "organization":"Klaviyo",
-                    "title":"Engineer",
-                    "image":"https://images.pexels.com/photos/3760854/pexels-photo-3760854.jpeg",
-                    "location":{"address1":"89 E 42nd St",
-                        "address2":"1st floor",
-                        "city":"New York",
-                        "country":"United States",
-                        "region":"NY",
-                        "timezone":"America/New_York"},
-                        "properties":{"newKey":"New Value"}}}}
+            'body' => '
+               {"data":
+                   {
+                        "type":"profile",
+                        "attributes": '. $json_data_obj .'
+                    }
+                }
             ',
             'headers' => [
                 'Authorization' => 'Klaviyo-API-Key '. $apiKey,
@@ -553,10 +564,11 @@ class Klaviyo_Integration_Admin
                 'revision' => '2023-09-15',
             ],
         ]);
- 
 
-        // echo "<pre>";
-        // print_r($post_response);
-        // exit;
+
+        $post_response = json_decode($post_response->getBody());
+        $post_response = (array)$post_response->data;
+        
+        return $post_response;
     }
 }
