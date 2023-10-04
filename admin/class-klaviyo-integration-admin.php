@@ -302,12 +302,12 @@ class Klaviyo_Integration_Admin
         //     exit;
 
         if ($update) {
-            update_option('akicf7_' . $post_id . '_enable_checkbox', $_POST['akicf7_checkbox']);
+           // update_option('akicf7_' . $post_id . '_enable_checkbox', $_POST['akicf7_checkbox']);
             update_option('akicf7_' . $post_id . '_apikey', $_POST['akicf7_apikey']);
 
             update_option('akicf7_' . $post_id . '_mapped_fields', serialize($_POST['akicf7']));
         } else {
-            add_option('akicf7_' . $post_id . '_enable_checkbox', $_POST['akicf7_checkbox']);
+           // add_option('akicf7_' . $post_id . '_enable_checkbox', $_POST['akicf7_checkbox']);
             add_option('akicf7_' . $post_id . '_apikey', $_POST['akicf7_apikey']);
 
             add_option('akicf7_' . $post_id . '_mapped_fields', serialize($_POST['akicf7']));
@@ -405,7 +405,7 @@ class Klaviyo_Integration_Admin
                         $remove_btn = '';
                     } else {
                         $astrik = "";
-                        $remove_btn = '<div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/>Remove</a></div>';
+                        $remove_btn = '<div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/awesome-cf7/admin/images/delete.svg"/>Remove</a></div>';
                     }
                     if ($trimmed != "") {
                         $blocks .= '                          
@@ -473,7 +473,7 @@ class Klaviyo_Integration_Admin
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                         <div class="col-md-3 pull-right akicf7_add_block">
-                                                            <a  onclick="custom_adding_field_block();" class=" btn_ btn-primary_ btn-full" ><img src="/wp-content/plugins/klaviyo-integration/admin/images/add.svg"/>Add Field</a>
+                                                            <a  onclick="custom_adding_field_block();" class=" btn_ btn-primary_ btn-full" ><img src="/wp-content/plugins/awesome-cf7/admin/images/add.svg"/>Add Field</a>
                                                         </div>
                                                         </div>
                                                     </div>

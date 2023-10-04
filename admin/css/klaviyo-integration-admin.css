@@ -408,6 +408,10 @@ button.akicf7_fetch_all_lists {
    width: 100%;
 }
 
+#akicf7 .delete, 
+.m_akicf7_add_block{
+   cursor: pointer;
+}
 
 @media (max-width:767px) {
    #akicf7 {
