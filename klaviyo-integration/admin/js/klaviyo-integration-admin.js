@@ -138,13 +138,17 @@
                     </div>
                 </div>
         `)
-        $.each(php_cf7_fields, function(key, value) {
-            // $('.php_cf7_fields'+count ).append('<option value="' + value +'">' + value + '</option>');
-            $('.php_cf7_fields' ).append('<option value="' + value +'">' + value + '</option>');
-        });
         $.each(klaviyo_fields, function(key, value) {
-            // $('.klaviyo_cf7_fields'+count).append('<option value="' + value +'">' + value + '</option>');
-            $('.klaviyo_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
+            $('.php_cf7_fields.p'+count ).append('<option value="' + value +'">' + value + '</option>');
+            // $('.php_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
+        });
+        // $.each(php_cf7_fields, function(key, value) {
+        //     // $('.php_cf7_fields'+count ).append('<option value="' + value +'">' + value + '</option>');
+        //     $('.php_cf7_fields' ).append('<option value="' + value +'">' + value + '</option>');
+        // });
+        $.each(klaviyo_fields, function(key, value) {
+            $('.klaviyo_cf7_fields.k'+count ).append('<option value="' + value +'">' + value + '</option>');
+            // $('.klaviyo_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
         });
         count++;
         }
