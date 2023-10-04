@@ -45,6 +45,8 @@ class Klaviyo_Integration_Admin
 
     public $api_key;
 
+    public $post_id;
+
     // private $fields_name;
 
 
@@ -65,6 +67,10 @@ class Klaviyo_Integration_Admin
 
     public function setApikey($apiKey) { 
         $this->api_key = $apiKey; 
+    }
+
+    public function setPostId($postId) { 
+        $this->post_id = $postId; 
     }
 
     /**
@@ -202,17 +208,20 @@ class Klaviyo_Integration_Admin
     }
 
     function fetch_lists_fields_from_klaviyo(){
+        $dummy_user_id = get_option('akicf7_' . $this->post_id . '_dummy_user_id'); 
 
+        if(!$dummy_user_id){
+            $json_data_obj = "create_dummy_user";
+            $dummy_user_id = $this->create_profile($this->api_key, $json_data_obj);
 
-        // if(){
-        //     $json_data_obj = "create_dummy_user";
-        //     $post_response = $this->create_profile($this->api_key, $json_data_obj);
-        // }
-
+           add_option('akicf7_' . $this->post_id . '_dummy_user_id', $dummy_user_id);
+        }  
+        
         require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
         $client = new \GuzzleHttp\Client();
 
-        $klv_response = $client->request('GET', 'https://a.klaviyo.com/api/profiles/01HAP7ZK9DXYX9FVNV1RGTFM09/', [   // pk_3979bc797b39b9c4b7641ec070c9c5018a
+        $klv_response = $client->request('GET', 'https://a.klaviyo.com/api/profiles/'.$dummy_user_id.'/', [   
+        //$klv_response = $client->request('GET', 'https://a.klaviyo.com/api/profiles/01HAP7ZK9DXYX9FVNV1RGTFM09/', [   // pk_3979bc797b39b9c4b7641ec070c9c5018a
             'headers' => [
               'Authorization' => 'Klaviyo-API-Key ' . $this->api_key,
               'accept' => 'application/json',
@@ -310,8 +319,9 @@ class Klaviyo_Integration_Admin
     public function my_ajax_handler()  {
         $data = $_POST;
         $apiKey = $data["api"];
-        // $post_id = $data["post_id"];
+        $postId = $data["post_id"];
         $this->setApikey($apiKey);
+        $this->setPostId($postId);
        
         require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
         $client = new \GuzzleHttp\Client();
@@ -362,7 +372,7 @@ class Klaviyo_Integration_Admin
                 $key = ($apiKey ? $apiKey : "");
 
                 // contact-form-7 start ****
-                $ContactForm = WPCF7_ContactForm::get_instance($data["post_id"]);
+                $ContactForm = WPCF7_ContactForm::get_instance($postId);
                 $form_fields = $ContactForm->scan_form_tags();
                 $cf7_fields = "<option value='Select'>Select</option>";
 
@@ -521,20 +531,20 @@ class Klaviyo_Integration_Admin
             $mapped_fields = get_option('akicf7_' . $post_id . '_mapped_fields');
             $mapped_fields = unserialize($mapped_fields);
     
-            $common_array_keys = array_intersect_key($input_fields,$mapped_fields);
+            $common_array_keys = array_intersect_key($input_fields, $mapped_fields);
             $json_data_obj = json_encode($common_array_keys);
 
-            // echo "<pre>";
-            // print_r($input_fields);
-            // print_r($mapped_fields);
-            // print_r($json_data_obj);
-            // exit;
+            echo "<pre>";
+            print_r($input_fields);
+            print_r($mapped_fields);
+            print_r($json_data_obj);
+            //exit;
 
             $post_response = $this->create_profile($apiKey, $json_data_obj);
 
             echo "<pre>";
             print_r($post_response);
-            // exit;
+            exit;
 
         }catch (Exception $e) {
             echo $e;
@@ -543,9 +553,10 @@ class Klaviyo_Integration_Admin
 
     function create_profile($apiKey , $json_data_obj){
 
-        if($json_data_obj == "create_dummy_user") $json_data_obj = '{"first_name":"dummy","last_name":"dummy","email":"dummy@dummy.com"}';
-  
-        
+        if($json_data_obj == "create_dummy_user") {
+            $json_data_obj = '{"first_name":"dummy","last_name":"dummy","email":"dummy4@dummy.com"}';
+        }
+      
         require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
         $client = new \GuzzleHttp\Client();
         $post_response = $client->request('POST', 'https://a.klaviyo.com/api/profiles/', [
@@ -565,10 +576,9 @@ class Klaviyo_Integration_Admin
             ],
         ]);
 
-
         $post_response = json_decode($post_response->getBody());
         $post_response = (array)$post_response->data;
         
-        return $post_response;
+        return($post_response['id']);
     }
 }

@@ -3,6 +3,7 @@
 try {
     // klaviyo all lists start ****
      $this->setApikey($apiKey);
+     $this->setPostId($post_id);
      $klaviyo_fields = $this->fetch_lists_fields_from_klaviyo();
 
         // $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/' . $data["listId"], [
