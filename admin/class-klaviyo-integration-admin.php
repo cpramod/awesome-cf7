@@ -210,7 +210,7 @@ class Klaviyo_Integration_Admin
     function fetch_lists_fields_from_klaviyo(){
         $dummy_user_id = get_option('akicf7_' . $this->post_id . '_dummy_user_id'); 
 
-        if(!$dummy_user_id){
+        if($dummy_user_id != ""){
             $json_data_obj = "create_dummy_user";
             $dummy_user_id = $this->create_profile($this->api_key, $json_data_obj);
 
@@ -322,6 +322,9 @@ class Klaviyo_Integration_Admin
         $postId = $data["post_id"];
         $this->setApikey($apiKey);
         $this->setPostId($postId);
+
+        //print_r($_POST);
+        //exit;
        
         require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
         $client = new \GuzzleHttp\Client();
@@ -378,8 +381,8 @@ class Klaviyo_Integration_Admin
 
                 $cf7_fields_name = [];
 
-                foreach ($klaviyo_fields as $field) {
-                    $cf7_fields .= "<option value='" . $field . "'>" . $field  . "</option>";
+                foreach ($klaviyo_fields as $key => $field) {
+                    $cf7_fields .= "<option value='" . $field . "'>" .  ucwords(str_replace("_"," ",$field )) . "</option>";
                 }
                 // foreach($form_fields as $field){      
                 //      $trimmed = ucwords(trim($field->raw_name, "your-")); 

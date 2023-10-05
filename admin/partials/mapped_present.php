@@ -118,13 +118,13 @@ try {
                                     <div class="col-md-8">
                                         <select class="form-control" required="" name="akicf7[<?php echo $key ?>]">
                                             <?php foreach ($klaviyo_fields as $key1 => $value1) {
-                                                var_dump($value1);
-                                                var_dump($key1);
-                                                var_dump($value);
+                                                // var_dump($value1);
+                                                // var_dump($key1);
+                                                // var_dump($value);
                                                 if($value1 == $value ){
-                                                    echo "<option selected value=" . $value . ">". $value ."</option>";
+                                                    echo "<option selected value=" . $value . ">". ucwords(str_replace("_"," ",$value)) ."</option>";
                                                 }else{
-                                                    echo "<option value=" . $value1 . ">". $value1 ."</option>";
+                                                    echo "<option value=" . $value1 . ">". ucwords(str_replace("_"," ",$value1)) ."</option>";
                                                 }                                              
                                             } ?>
                                         </select>
@@ -186,13 +186,14 @@ try {
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/>Remove</a>
+                            <div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/awesome-cf7/admin/images/delete.svg"/>Remove</a>
                             </div>
                             </div>
                         </div>
                     `)
                        $.each(klaviyo_fields, function(key, value) {
-                            $('.php_cf7_fields.p'+count ).append('<option value="' + value +'">' + value + '</option>');
+                            var str = value.replace(/_/g, " ");
+                            $('.php_cf7_fields.p'+count ).append('<option value="' + value +'">' + str.replace(/^./, str[0].toUpperCase()) + '</option>');
                            // $('.php_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
                         });
                         // $.each(php_cf7_fields, function(key, value) {
@@ -200,7 +201,8 @@ try {
                         //     $('.php_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
                         // });
                         $.each(klaviyo_fields, function(key, value) {
-                            $('.klaviyo_cf7_fields.k'+count ).append('<option value="' + value +'">' + value + '</option>');
+                            var str = value.replace(/_/g, " ");
+                            $('.klaviyo_cf7_fields.k'+count ).append('<option value="' + value +'">' + str.replace(/^./, str[0].toUpperCase()) + '</option>');
                            // $('.klaviyo_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
                         });
                         count++;
