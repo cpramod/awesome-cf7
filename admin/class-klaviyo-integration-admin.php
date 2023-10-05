@@ -208,8 +208,9 @@ class Klaviyo_Integration_Admin
     }
 
     function fetch_lists_fields_from_klaviyo(){
-        $dummy_user_id = get_option('akicf7_' . $this->post_id . '_dummy_user_id'); 
 
+        $dummy_user_id = get_option('akicf7_' . $this->post_id . '_dummy_user_id'); 
+ 
         if(!$dummy_user_id){
             $json_data_obj = "create_dummy_user";
             $dummy_user_id = $this->create_profile($this->api_key, $json_data_obj);
@@ -217,6 +218,7 @@ class Klaviyo_Integration_Admin
            add_option('akicf7_' . $this->post_id . '_dummy_user_id', $dummy_user_id);
         }  
         
+
         require_once(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php');
         $client = new \GuzzleHttp\Client();
 
@@ -349,7 +351,6 @@ class Klaviyo_Integration_Admin
                 $res = json_decode($response->getBody());
                 $newArray = (array)$res->data;
 
-
                 // klaviyo all lists start ****
                 $klaviyo_fields = $this->fetch_lists_fields_from_klaviyo();
 
@@ -369,17 +370,17 @@ class Klaviyo_Integration_Admin
                 }
                 $checked_unchecked = ($apiKey ? "checked" : "");
                 $enable_disable = ($apiKey ? "enable" : "disable");
-                $key = ($apiKey ? $apiKey : "");
+                // $key = ($apiKey ? $apiKey : "");
 
                 // contact-form-7 start ****
                 $ContactForm = WPCF7_ContactForm::get_instance($postId);
                 $form_fields = $ContactForm->scan_form_tags();
-                $cf7_fields = "<option value='Select'>Select</option>";
+                $klv_fields = "<option value=' '>Select field</option>";
 
                 $cf7_fields_name = [];
 
-                foreach ($klaviyo_fields as $field) {
-                    $cf7_fields .= "<option value='" . $field . "'>" . $field  . "</option>";
+                foreach ($klaviyo_fields as $key => $field) {
+                    $klv_fields .= "<option value='" . $field . "'>" .  ucwords(str_replace("_"," ",$field )) . "</option>";
                 }
                 // foreach($form_fields as $field){      
                 //      $trimmed = ucwords(trim($field->raw_name, "your-")); 
@@ -417,7 +418,7 @@ class Klaviyo_Integration_Admin
                                                     </div>
                                                     <div class="col-md-8">
                                                         <select class="form-control" required="" name="akicf7['. $trimmed .']">
-                                                            ' . $cf7_fields . '
+                                                            ' . $klv_fields . '
                                                         </select>
                                                     </div>
                                                 </div>
@@ -434,6 +435,11 @@ class Klaviyo_Integration_Admin
                 $cf7_extra_fields = array("Phone", "City", "zip", "Go Pro ..");
                 $merged_cf7_fields = array_merge($cf7_fields_name, $cf7_extra_fields);
 
+                if (!array_key_exists("Select",$klaviyo_fields)){
+                    $add = array(' ' => "Select Field");
+                    $klaviyo_fields = $add + $klaviyo_fields;
+                }
+
                 $html = array(
                     'html' => '
                                     <div id="akicf7_app">
@@ -445,8 +451,8 @@ class Klaviyo_Integration_Admin
                                                         <div class="akicf7_api_box">
                                                            <div>
                                                                     <label>Enter Your Api Key:</label>
-                                                                    <input type="text" id="akicf7_apikey" value="' . $key . '" disabled="akicf7_apikey">
-                                                                    <input type="hidden" id="akicf7_apikey_" name="akicf7_apikey" value="' . $key . '" >
+                                                                    <input type="text" id="akicf7_apikey" value="' . $apiKey . '" disabled="akicf7_apikey">
+                                                                    <input type="hidden" id="akicf7_apikey_" name="akicf7_apikey" value="' . $apiKey . '" >
                                                            </div> 
                                                             <div class="akicf7_select_list">
                                                                 <label>Select Klaviyo List</label>
@@ -582,3 +588,4 @@ class Klaviyo_Integration_Admin
         return($post_response['id']);
     }
 }
+
