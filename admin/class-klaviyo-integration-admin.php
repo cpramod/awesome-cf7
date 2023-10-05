@@ -378,7 +378,7 @@ class Klaviyo_Integration_Admin
 
                 $cf7_fields_name = [];
 
-                foreach ($klaviyo_fields as $field) {
+                foreach ($klaviyo_fields as $key => $field) {
                     $cf7_fields .= "<option value='" . $field . "'>" . $field  . "</option>";
                 }
                 // foreach($form_fields as $field){      
