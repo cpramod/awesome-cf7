@@ -6,6 +6,12 @@ try {
      $this->setPostId($post_id);
      $klaviyo_fields = $this->fetch_lists_fields_from_klaviyo();
 
+     if (!array_key_exists("Select",$klaviyo_fields)){
+        $add = array('Select' => "Select");
+        $klaviyo_fields = $add + $klaviyo_fields;
+    }
+
+
         // $response = $client->request('GET', 'https://a.klaviyo.com/api/lists/' . $data["listId"], [
         //     'headers' => [
         //         'Authorization' => 'Klaviyo-API-Key ' . $apiKey ,
@@ -124,7 +130,7 @@ try {
                                         </select>
                                     </div>
                                 </div>
-                                <?php echo in_array($key, $astrik_array) ? "" : "<div class='col-md-3 delete'> <a class='btn_ btn-danger_'><img src='/wp-content/plugins/klaviyo-integration/admin/images/delete.svg'/>Remove</a></div>";  ?>
+                                <?php echo in_array($key, $astrik_array) ? "" : "<div class='col-md-3 delete'> <a class='btn_ btn-danger_'><img src='/wp-content/plugins/awesome-cf7/admin/images/delete.svg'/>Remove</a></div>";  ?>
                             </div>
                         </div>
                     <?php } ?>
@@ -136,8 +142,7 @@ try {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-3 pull-right m_akicf7_add_block">
-                                <!-- <a onclick="custom_adding_field_block();" class=" btn_ btn-primary_ btn-full"><img src="/wp-content/plugins/klaviyo-integration/admin/images/add.svg" />Add Field</a> -->
-                                <a class=" btn_ btn-primary_ btn-full"><img src="/wp-content/plugins/klaviyo-integration/admin/images/add.svg" />Add Field</a>
+                                <a class=" btn_ btn-primary_ btn-full"><img src="/wp-content/plugins/awesome-cf7/admin/images/add.svg" />Add Field</a>
                             </div>
                         </div>
                     </div>
@@ -153,7 +158,6 @@ try {
 
         <div class="aki7_loader"></div>
     </div>
-    
     <script type="text/javascript">
         (function($) {
         "use strict";
@@ -173,12 +177,12 @@ try {
                             <div class="col-md-9">
                                 <div class="col-md-4">
                                 <select class="form-control php_cf7_fields p${count}" required="" name="${count}">
-                                <option value="Select">Select</option>
+                                <!--  <option value="Select">Select</option>  -->
                                 </select>
                                 </div>
                                 <div class="col-md-8">
                                     <select class="form-control klaviyo_cf7_fields k${count}" required="" name="${count}">
-                                        <option value="Select">Select</option>
+                                    <!--  <option value="Select">Select</option>  -->
                                     </select>
                                 </div>
                             </div>

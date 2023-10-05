@@ -124,16 +124,16 @@
                     <div class="col-md-9">
                         <div class="col-md-4">
                         <select class="form-control php_cf7_fields p${count}" required="" name="${count}">
-                           <option value="Select">Select</option>
+                           <!--  <option value="Select">Select</option>  -->
                         </select>
                         </div>
                         <div class="col-md-8">
                             <select class="form-control klaviyo_cf7_fields k${count}" required="" name="${count}">
-                                <option value="Select">Select</option>
+                                <!--  <option value="Select">Select</option>  -->
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/klaviyo-integration/admin/images/delete.svg"/>Remove</a>
+                    <div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/awesome-cf7/admin/images/delete.svg"/>Remove</a>
                     </div>
                     </div>
                 </div>
