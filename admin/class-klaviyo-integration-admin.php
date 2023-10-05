@@ -462,7 +462,7 @@ class Klaviyo_Integration_Admin
                                                             </div>   
                                                         </div>
                                                     </div>
-                                                <input id="post_id" type="hidden" value="'.$post_id.'" name="post_id">
+                                                <input id="post_id" type="hidden" value="'.$postId.'" name="post_id">
                                         </fieldset>         
                                         
                                         <div id="akicf7_has_lists">
