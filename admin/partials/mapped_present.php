@@ -122,9 +122,9 @@ try {
                                                 // var_dump($key1);
                                                 // var_dump($value);
                                                 if($value1 == $value ){
-                                                    echo "<option selected value=" . $value . ">". str_replace("_"," ",$value) ."</option>";
+                                                    echo "<option selected value=" . $value . ">". ucwords(str_replace("_"," ",$value)) ."</option>";
                                                 }else{
-                                                    echo "<option value=" . $value1 . ">". str_replace("_"," ",$value1) ."</option>";
+                                                    echo "<option value=" . $value1 . ">". ucwords(str_replace("_"," ",$value1)) ."</option>";
                                                 }                                              
                                             } ?>
                                         </select>
@@ -192,7 +192,8 @@ try {
                         </div>
                     `)
                        $.each(klaviyo_fields, function(key, value) {
-                            $('.php_cf7_fields.p'+count ).append('<option value="' + value +'">' + value.replace(/_/g, " ") + '</option>');
+                            var str = value.replace(/_/g, " ");
+                            $('.php_cf7_fields.p'+count ).append('<option value="' + value +'">' + str.replace(/^./, str[0].toUpperCase()) + '</option>');
                            // $('.php_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
                         });
                         // $.each(php_cf7_fields, function(key, value) {
@@ -200,7 +201,8 @@ try {
                         //     $('.php_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
                         // });
                         $.each(klaviyo_fields, function(key, value) {
-                            $('.klaviyo_cf7_fields.k'+count ).append('<option value="' + value +'">' + value.replace(/_/g, " ") + '</option>');
+                            var str = value.replace(/_/g, " ");
+                            $('.klaviyo_cf7_fields.k'+count ).append('<option value="' + value +'">' + str.replace(/^./, str[0].toUpperCase()) + '</option>');
                            // $('.klaviyo_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
                         });
                         count++;
