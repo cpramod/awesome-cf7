@@ -124,12 +124,12 @@
                     <div class="col-md-9">
                         <div class="col-md-4">
                         <select class="form-control php_cf7_fields p${count}" required="" name="${count}">
-                           <!--  <option value="Select">Select</option>  -->
+                           <!--  <option value="0">Select Field</option>  -->
                         </select>
                         </div>
                         <div class="col-md-8">
                             <select class="form-control klaviyo_cf7_fields k${count}" required="" name="${count}">
-                                <!--  <option value="Select">Select</option>  -->
+                                <!--  <option value="0">Select Field</option>  -->
                             </select>
                         </div>
                     </div>
@@ -139,7 +139,8 @@
                 </div>
         `)
         $.each(klaviyo_fields, function(key, value) {
-            $('.php_cf7_fields.p'+count ).append('<option value="' + value +'">' + value + '</option>');
+            var str = value.replace(/_/g, " ");
+            $('.php_cf7_fields.p'+count ).append('<option value="' + key +'">' + str.replace(/^./, str[0].toUpperCase())+ '</option>');
             // $('.php_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
         });
         // $.each(php_cf7_fields, function(key, value) {
@@ -147,7 +148,8 @@
         //     $('.php_cf7_fields' ).append('<option value="' + value +'">' + value + '</option>');
         // });
         $.each(klaviyo_fields, function(key, value) {
-            $('.klaviyo_cf7_fields.k'+count ).append('<option value="' + value +'">' + value + '</option>');
+            var str = value.replace(/_/g, " ");
+            $('.klaviyo_cf7_fields.k'+count ).append('<option value="' + key +'">' + str.replace(/^./, str[0].toUpperCase()) + '</option>');
             // $('.klaviyo_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
         });
         count++;
@@ -189,6 +191,7 @@
 
 
 })(jQuery);
+
 
 
 
