@@ -161,7 +161,7 @@ class Klaviyo_Integration {
         // ***** custom added ***** //
         $this->loader->add_action('admin_menu', $plugin_admin, 'settings_menu');
         $this->loader->add_filter('wpcf7_editor_panels', $plugin_admin,'add_cf7_panel');
-        $this->loader->add_action('save_post', $plugin_admin,'save_awesome_cf7_klaviyo_custom_fields',10, 3);
+        $this->loader->add_action('save_post', $plugin_admin,'save_to_akicf7_fields_to_database',10, 3);
         //$this->loader->add_action('save_post', $plugin_admin, array($this,'save_awesome_cf7_klaviyo_custom_fields'));
         $this->loader->add_action( 'wp_ajax_nopriv_get_data', $plugin_admin,'my_ajax_handler' );
         $this->loader->add_action( 'wp_ajax_get_data', $plugin_admin,'my_ajax_handler' );
