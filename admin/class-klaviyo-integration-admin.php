@@ -379,7 +379,7 @@ class Klaviyo_Integration_Admin
                 $cf7_fields_name = [];
 
                 foreach ($klaviyo_fields as $key => $field) {
-                    $cf7_fields .= "<option value='" . $field . "'>" . $field  . "</option>";
+                    $cf7_fields .= "<option value='" . $field . "'>" .  ucwords(str_replace("_"," ",$field )) . "</option>";
                 }
                 // foreach($form_fields as $field){      
                 //      $trimmed = ucwords(trim($field->raw_name, "your-")); 
