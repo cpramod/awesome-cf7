@@ -130,7 +130,7 @@ try {
                                         </select>
                                     </div>
                                 </div>
-                                <?php echo in_array($key, $astrik_array) ? "" : "<div class='col-md-3 delete'> <a class='btn_ btn-danger_'><img src='/wp-content/plugins/awesome-cf7/admin/images/delete.svg'/>Remove</a></div>";  ?>
+                                <?php echo in_array($key, $astrik_array) ? "" :"<div class='col-md-3 delete'> <a class='btn_ btn-danger_'><img src='".plugin_dir_url( __DIR__ )."images/delete.svg'/>Remove</a></div>";  ?>
                             </div>
                         </div>
                     <?php } ?>
@@ -142,7 +142,7 @@ try {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-3 pull-right m_akicf7_add_block">
-                                <a class=" btn_ btn-primary_ btn-full"><img src="/wp-content/plugins/awesome-cf7/admin/images/add.svg" />Add Field</a>
+                                 <a class=" btn_ btn-primary_ btn-full"><img src="<?php echo plugin_dir_url( __DIR__ ) ?>images/add.svg" />Add Field</a>
                             </div>
                         </div>
                     </div>

@@ -26,9 +26,12 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {   // WPCF7 ABSPATH WPINC
+    die;
 }
+// $option = get_option( 'wpcf7' );
+// echo "<pre>";
+// print_r($option);exit;
 
 /**
  * Currently plugin version.
