@@ -371,6 +371,7 @@ class Klaviyo_Integration_Admin
                 $checked_unchecked = ($apiKey ? "checked" : "");
                 $enable_disable = ($apiKey ? "enable" : "disable");
                 // $key = ($apiKey ? $apiKey : "");
+                $url = plugin_dir_url( __FILE__ );
 
                 // contact-form-7 start ****
                 $ContactForm = WPCF7_ContactForm::get_instance($postId);
@@ -406,7 +407,7 @@ class Klaviyo_Integration_Admin
                         $remove_btn = '';
                     } else {
                         $astrik = "";
-                        $remove_btn = '<div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="/wp-content/plugins/awesome-cf7/admin/images/delete.svg"/>Remove</a></div>';
+                          $remove_btn = '<div class="col-md-3 delete"> <a class="btn_ btn-danger_"><img src="'.$url.'images/delete.svg"/>Remove</a></div>';
                     }
                     if ($trimmed != "") {
                         $blocks .= '                          
@@ -479,7 +480,7 @@ class Klaviyo_Integration_Admin
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                         <div class="col-md-3 pull-right akicf7_add_block">
-                                                            <a  onclick="custom_adding_field_block();" class=" btn_ btn-primary_ btn-full" ><img src="/wp-content/plugins/awesome-cf7/admin/images/add.svg"/>Add Field</a>
+                                                             <a  onclick="custom_adding_field_block();" class=" btn_ btn-primary_ btn-full" ><img src="'.$url.'images/add.svg"/>Add Field</a>
                                                         </div>
                                                         </div>
                                                     </div>
