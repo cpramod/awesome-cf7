@@ -153,6 +153,7 @@
             // $('.klaviyo_cf7_fields').append('<option value="' + value +'">' + value + '</option>');
         });
         count++;
+        $('.php_cf7_fields option:last').attr('disabled','disabled');
         }
 
         // // assigning custom name to custom added fields
