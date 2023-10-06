@@ -117,7 +117,7 @@ function akicf7_please_activate_cf7(){
     global $pagenow;
     if ( $pagenow == 'plugins.php' || $pagenow == 'index.php'  ) {
          echo '<div class="notice notice-warning is-dismissible">
-             <p>Please install <b><a href="https://contactform7.com/download/">Contact Form 7</a></b> before installing the <b><a href="https://pcsoftnepal.com/support/">CF7 Klaviyo Integration</a></b>.</p>
+             <p>"Contact form 7 plugin is required to run Awesome Klaviyo Integration Plugin. Please install it.</p>
          </div>';
     }
     return 0;
